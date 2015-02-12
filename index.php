@@ -1,3 +1,18 @@
+<?php
+    session_start();
+    $_SESSION['user_id'] = 0;
+    $con=mysql_connect("localhost","root","PASSWORD");
+    if (!$con) {
+        die('Could not connect to MySQL: ' . mysql_error());
+    }
+    else{
+        if ( !mysql_select_db("477b"))
+        {
+            echo "Can't connect to 477b";
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,24 +36,13 @@
                       $("#logout").click(function(){
                                          window.open ('login.html','_self',false)
                                          });
-                      $("#b1").click(function(){
-                                     setting = "b1";
-                                      });
-                      $("#b2").click(function(){
-                                     setting = "b2";
-                                     });
-                      $("#b3").click(function(){
-                                     setting = "b3";
-                                     });
-                      $("#b4").click(function(){
-                                     setting = "b4";
-                                     });
-                      $("#b5").click(function(){
-                                     setting = "b5";
-                                     });
-                      $("#b6").click(function(){
-                                     setting = "b6";
-                                     });
+                      <?php
+                      $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
+                      while($row = mysql_fetch_row($check))
+                      {
+                      echo("$(\"#".$row[0]."\").click(function(){setting = \"".$row[0]."\";alert('".$row[0]."');});");
+                      }
+                      ?>
                       $("#go").click(function(){
                                      alert("go");
                                      });
@@ -76,12 +80,13 @@
       </center>
 </div>
 <div id ="sidebar">
-<div class ="config" id="b1">Weekday</div>
-<div class ="config" id="b2">Weekend</div>
-<div class ="config" id="b3">Dodgers Game</div>
-<div class ="config" id="b4">Presidential Motorcade</div>
-<div class ="config" id="b5">Black Friday</div>
-<div class ="config" id="b6">Evacuation</div>
+<?php
+    $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
+    while($row = mysql_fetch_row($check))
+    {
+        echo("<div class =\"config\" id=\"".$row[0]."\">".$row[0]."</div>");
+    }
+    ?>
 </div>
 <div id ="times">
     Start Time
