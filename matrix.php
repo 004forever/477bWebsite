@@ -10,16 +10,16 @@
     var setting = "b1";
     $(document).ready(function(){
                           $("#map").click(function(){
-                                          window.open ('index.html','_self',false);
+                                          window.open ('index.php','_self',false);
                                        });
                           $("#settings").click(function(){
-                                               window.open ('settings.html','_self',false);
+                                               window.open ('settings.php','_self',false);
                                           });
                             $("#matrix").click(function(){
-                                               window.open ('matrix.html','_self',false);
+                                               window.open ('matrix.php','_self',false);
                                       });
                       $("#logout").click(function(){
-                                         window.open ('login.html','_self',false);
+                                         window.open ('login.php','_self',false);
                                          });
                       $("#b1").click(function(){
                                      setting = "b1";

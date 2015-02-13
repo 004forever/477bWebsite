@@ -10,7 +10,7 @@
     var setting = "b1";
     $(document).ready(function(){
                       $("#go").click(function(){
-                                       window.open('index.html', '_self', false);
+                                       window.open('index.php', '_self', false);
                                      });
     });
                                           

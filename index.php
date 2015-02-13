@@ -1,6 +1,9 @@
 <?php
     session_start();
     $_SESSION['user_id'] = 0;
+    if(!isset($_SESSION['selection']))
+        $_SESSION['selection'] = 'Weekend';
+    echo("".$_SESSION['selection']);
     $con=mysql_connect("localhost","root","PASSWORD");
     if (!$con) {
         die('Could not connect to MySQL: ' . mysql_error());
@@ -25,22 +28,22 @@
     var setting = "b1";
     $(document).ready(function(){
                       $("#map").click(function(){
-                                      window.open ('index.html','_self',false)
+                                      window.open ('index.php','_self',false)
                                       });
                       $("#settings").click(function(){
-                                           window.open ('settings.html','_self',false)
+                                           window.open ('settings.php','_self',false)
                                            });
                       $("#matrix").click(function(){
-                                         window.open ('matrix.html','_self',false)
+                                         window.open ('matrix.php','_self',false)
                                          });
                       $("#logout").click(function(){
-                                         window.open ('login.html','_self',false)
+                                         window.open ('login.php','_self',false)
                                          });
                       <?php
                       $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
                       while($row = mysql_fetch_row($check))
                       {
-                      echo("$(\"#".$row[0]."\").click(function(){setting = \"".$row[0]."\";alert('".$row[0]."');});");
+                      echo("$(\"#".$row[0]."\").click(function(){setting = \"".$row[0]."\";window.open (\"scripts/switch.php?selection=".$row[0]."&last=index\",'_self',false);});");
                       }
                       ?>
                       $("#go").click(function(){
@@ -84,7 +87,10 @@
     $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
     while($row = mysql_fetch_row($check))
     {
-        echo("<div class =\"config\" id=\"".$row[0]."\">".$row[0]."</div>");
+        if($row[0] != $_SESSION['selection'])
+            echo("<div class =\"config\" id=\"".$row[0]."\">".$row[0]."</div>");
+        else
+            echo("<div class =\"config\" id=\"".$row[0]."\"style = \"background-color:orange\">".$row[0]."</div>");
     }
     ?>
 </div>
