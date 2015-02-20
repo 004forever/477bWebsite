@@ -1,6 +1,7 @@
 <?php
     session_start();
-    $_SESSION['user_id'] = 0;
+    if(!isset($_SESSION['user_id']))
+                        header("location: login.php");
     if(!isset($_SESSION['selection']))
         $_SESSION['selection'] = 'Weekend';
     echo("".$_SESSION['selection']);
@@ -37,7 +38,7 @@
                                          window.open ('matrix.php','_self',false)
                                          });
                       $("#logout").click(function(){
-                                         window.open ('login.php','_self',false)
+                                         window.open ('scripts/logout.php','_self',false)
                                          });
                       <?php
                       $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");

@@ -34,7 +34,7 @@
                                                window.open ('matrix.php','_self',false);
                                       });
                       $("#logout").click(function(){
-                                         window.open ('login.php','_self',false);
+                                         window.open ('scripts/logout.php','_self',false)
                                          });
                       <?php
                       $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
