@@ -73,20 +73,24 @@
               <table>
                 <tr>
               <td>Algorithm Type:</td>
-              <td><select name="algorithm">
-                  <option value="greedy">Greedy</option>
-                  <option value="optimal">Optimal</option>
-              </select></td></tr>
-                <tr>
-              <td>Weather Type:</td>
-              <td><select name="weather">
-                  <option value="Sunny">Sunny</option>
-                  <option value="Light Rain">Light Rain</option>
-                  <option value="Heavy Rain">Heavy Rain</option>
+<td><select name="algorithm">
+                <?php
+                    $lines = mysql_query("SELECT id, name FROM routing_types WHERE 1=1");
+                    while($line = mysql_fetch_row($lines))
+                    {
+                        if($line[0] != $row[0])
+                            echo("<option value=".$line[0].">".$line[1]."</option>");
+                        else
+                            echo("<option selected value=".$line[0].">".$line[1]."</option>");
+                    }
+                    ?>
               </select></td></tr>
                 <tr>
                 <td>Max Freeway Speed:</td>
     <td><input type="text" size="3" name = "max_speed" value = <?php echo("'".$row[1]."'"); ?> </input>MPH</td></tr>
+<tr>
+<td>Using Map Percentage:<br></td>
+<td><input type="text" size="3" name = "map" value = <?php echo("'".$row[4]."'");?>></input>%</td></tr>
                 </table>
               </div>
             <div width = "300px" style = "float:right;">
@@ -97,9 +101,6 @@
               <tr>
               <td>Rideshare Percentage:<br></td>
               <td><input type="text" size="3" name = "share" value = <?php echo("'".$row[3]."'");?>></input>%</td></tr>
-              <tr>
-              <td>Using Map Percentage:<br></td>
-              <td><input type="text" size="3" name = "map" value = <?php echo("'".$row[4]."'");?>></input>%</td></tr>
             </table>
               </form>
             
