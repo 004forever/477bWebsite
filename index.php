@@ -50,6 +50,9 @@
                       $("#go").click(function(){
                                      alert("go");
                                      });
+                      $("#add").click(function(){
+                                     document.adder.submit();
+                                     });
     });
                                           
 </script>
@@ -95,9 +98,16 @@
     }
     ?>
 </div>
-<div id ="times">
-    Start Time
-    <br>
+<form action = "scripts/addRun.php" method = "post" name = "adder" id="adder">
+<input type = text style="width:300px;height:30px;background-color:black;color:white;font-size:75%" name = "name">
+<div id = "add">
+ADD
+</div>
+</form>
+    <table id ="times">
+    <tr>
+    <td>Start Time</td>
+    <td>
     <select>
         <script>
             for(test = 0;test < 24;test++)
@@ -113,9 +123,10 @@
             }
         </script>
     </select>
-    <br>
-    End Time
-    <br>
+    </td></tr>
+    <tr>
+    <td>End Time</td>
+    <td>
     <select>
         <script>
             for(test = 0;test < 24;test++)
@@ -131,7 +142,8 @@
             }
         </script>
     </select>
-</div>
+    </td></tr>
+    </table>
 <br>
 </div>
 </body>
