@@ -5,7 +5,7 @@
     $pass1 = $_POST['password'];
     $pass2 = $_POST['password2'];
     
-$con=mysql_connect("127.0.0.1","root","PASSWORD");
+$con=mysql_connect("127.0.0.1","four","password");
 if (!$con) { 
 	die('Could not connect to MySQL: ' . mysql_error()); 
 } 

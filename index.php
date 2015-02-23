@@ -5,7 +5,7 @@
     if(!isset($_SESSION['selection']))
         $_SESSION['selection'] = 'Weekend';
     echo("".$_SESSION['selection']);
-    $con=mysql_connect("localhost","root","PASSWORD");
+    $con=mysql_connect("localhost","four","password");
     if (!$con) {
         die('Could not connect to MySQL: ' . mysql_error());
     }
