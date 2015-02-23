@@ -1,3 +1,18 @@
+<?php
+    session_start();
+    $_SESSION['user_id'] = 0;
+    $con=mysql_connect("localhost","root","PASSWORD");
+    if (!$con) {
+        die('Could not connect to MySQL: ' . mysql_error());
+    }
+    else{
+        if ( !mysql_select_db("477b"))
+        {
+            echo "Can't connect to 477b";
+        }
+    }
+    ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,26 +36,15 @@
                       $("#logout").click(function(){
                                          window.open ('scripts/logout.php','_self',false)
                                          });
-                      $("#b1").click(function(){
-                                     setting = "b1";
-                                      });
-                      $("#b2").click(function(){
-                                     setting = "b2";
-                                     });
-                      $("#b3").click(function(){
-                                     setting = "b3";
-                                     });
-                      $("#b4").click(function(){
-                                     setting = "b4";
-                                     });
-                      $("#b5").click(function(){
-                                     setting = "b5";
-                                     });
-                      $("#b6").click(function(){
-                                     setting = "b6";
-                                     });
-                      $("#save").click(function(){
-                                     alert("go");
+                      <?php
+                      $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
+                      while($row = mysql_fetch_row($check))
+                      {
+                      echo("$(\"#".$row[0]."\").click(function(){setting = \"".$row[0]."\";window.open (\"scripts/switch.php?selection=".$row[0]."&last=settings\",'_self',false);});");
+                      }
+                      ?>
+                      $("#go").click(function(){
+                                       document.adjust.submit();
                                      });
     });
                                           
@@ -61,32 +65,40 @@
  <div id="master">
 <div id="content">
         <div style = "overflow:scroll;width:600px;height=400px">
+          <form action = "scripts/updateMatrix.php" method = "post" name = "adjust">
         <table style="color:white;font-size:125%">
-        <script>
-            var size = 10;
-            document.write("<tr><td width='50px'>Exit</td>");
-            
-            for(var i = 0; i < size;i++)
+
+
+        <?php
+            echo ("SELECT matrix FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
+            $check = mysql_query("SELECT matrix FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
+            $row = mysql_fetch_row($check);
+            parse_str($row[0], $elements);
+            $size = 10;
+            echo("<tr><td width='50px'>Exit</td>");
+            for($i = 0; $i < $size;$i++)
             {
-                document.write("<td width='50px'>"+(i+1)+"</td>");
+                echo("<td width='50px'>".($i+1)."</td>");
             }
-        document.write("</tr>");
-        for(var i = 0;i < size;i++)
-        {
-            document.write("<tr><td width = '50px'>"+(i+1)+"</td>");
-            for(var j = 0;j < size;j++)
+            echo("</tr>");
+            for($i = 1;$i <= 10;$i++)
             {
-                document.write("<td width = '50px'>");
-                if(j != i)
+                echo ("<tr><td width = '50px'>".($i+1)."</td>");
+                for($j = 1;$j <= 10;$j++)
                 {
-                    document.write("<input type = 'text' size = '3' id = '"+i+"-"+j+"'>");
+                     echo("<td width = '50px'>");
+                    if($j != $i)
+                    {
+                        echo("<input type = 'text' size = '3' name = '".$i."-".$j."' value = ".$elements["".$i."-".$j].">");
+                    }
+                    echo("</td>");
                 }
-                document.write("</td>");
+                echo("</tr>");
             }
-            document.write("</tr>");
-        }
-        </script>
+            ?>
+
         </table>
+</form>
         </div>
       <center>
       <div id = "go">
@@ -95,12 +107,16 @@
       </center>
 </div>
 <div id ="sidebar">
-<div class ="config" id="b1">Weekday</div>
-<div class ="config" id="b2">Weekend</div>
-<div class ="config" id="b3">Dodgers Game</div>
-<div class ="config" id="b4">Presidential Motorcade</div>
-<div class ="config" id="b5">Black Friday</div>
-<div class ="config" id="b6">Evacuation</div>
+<?php
+    $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
+    while($row = mysql_fetch_row($check))
+    {
+        if($row[0] != $_SESSION['selection'])
+            echo("<div class =\"config\" id=\"".$row[0]."\">".$row[0]."</div>");
+        else
+            echo("<div class =\"config\" id=\"".$row[0]."\"style = \"background-color:orange\">".$row[0]."</div>");
+    }
+    ?>
 </div>
 
 <br>
