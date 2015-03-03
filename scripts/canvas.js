@@ -19,7 +19,7 @@ var barY = dim;
 var barW = dim/2;
 var barH = canvas.height-2*dim;
 var centerX = barX+barW/2;
-var centerY = barY +(barH-barH*scale);
+var centerY = barY +barH*scale;
 var radius = 20;
 
 function downClick(event)
@@ -54,13 +54,13 @@ function moveAround(event)
     }
     if(scrollDown)
     {
-        scale = (barH-event.y+c.offsetTop+barY)/barH;
+        scale = (event.y-c.offsetTop-barY)/barH;
         if(scale <= 0)
             scale = 0.01;
         if(scale > 1)
             scale = 1;
         centerX = barX+barW/2;
-        centerY = barY +(barH-barH*scale);
+        centerY = barY + barH*scale;
         
         draw();
     }
@@ -79,10 +79,13 @@ c.addEventListener("mouseup", upClick, false);
 
 function draw()
 {
+    var min = .1;
+    var max = 4;
+    var scaler = (1-scale)*(max-min)+min;
     ctx.clearRect ( 0 , 0 , canvas.width, canvas.height );
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect ( 0 , 0 , canvas.width, canvas.height );
-    ctx.drawImage(imageObj, x-canvas.width*(scale+1)/2, y-canvas.height*(scale+1)/2, canvas.width*(scale+1), canvas.height*(scale+1));
+    ctx.drawImage(imageObj, x-canvas.width*scaler/2, y-canvas.height*scaler/2, canvas.width*scaler, canvas.height*scaler);
     
     ctx.fillStyle = "#888888";
     ctx.fillRect(barX,barY,barW,barH);
