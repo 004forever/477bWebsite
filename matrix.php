@@ -1,7 +1,7 @@
 <?php
     session_start();
     $_SESSION['user_id'] = 0;
-    $con=mysql_connect("localhost","root","PASSWORD");
+    $con=mysql_connect("localhost","four","password");
     if (!$con) {
         die('Could not connect to MySQL: ' . mysql_error());
     }

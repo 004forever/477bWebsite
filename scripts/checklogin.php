@@ -2,7 +2,7 @@
     session_start();
 $username=$_POST['username'];
 $password=$_POST['password'];
-$con=mysql_connect("127.0.0.1","root","PASSWORD");
+$con=mysql_connect("127.0.0.1","four","password");
 if (!$con) { 
 	die('Could not connect to MySQL: ' . mysql_error()); 
 } 
