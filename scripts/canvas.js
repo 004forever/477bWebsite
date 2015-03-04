@@ -55,8 +55,8 @@ function moveAround(event)
     if(scrollDown)
     {
         scale = (event.y-c.offsetTop-barY)/barH;
-        if(scale <= 0)
-            scale = 0.01;
+        if(scale < 0)
+            scale = 0;
         if(scale > 1)
             scale = 1;
         centerX = barX+barW/2;
@@ -79,9 +79,9 @@ document.addEventListener("mouseup", upClick, false);
 
 function draw()
 {
-    var min = .1;
+    var min = .25;
     var max = 4;
-    var scaler = (1-scale)*(max-min)+min;
+    var scaler = (1-scale)*(1-scale)*(max-min)+min;
     ctx.clearRect ( 0 , 0 , canvas.width, canvas.height );
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect ( 0 , 0 , canvas.width, canvas.height );
