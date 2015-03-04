@@ -75,7 +75,7 @@ function upClick(event)
 
 c.addEventListener("mousedown", downClick, false);
 c.addEventListener("mousemove", moveAround, false);
-c.addEventListener("mouseup", upClick, false);
+document.addEventListener("mouseup", upClick, false);
 
 function draw()
 {
