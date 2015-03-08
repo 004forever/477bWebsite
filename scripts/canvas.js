@@ -250,6 +250,52 @@ c.addEventListener("mousedown", downClick, false);
 c.addEventListener("mousemove", moveAround, false);
 document.addEventListener("mouseup", upClick, false);
 
+
+function mixColors(c1, c2, percent)
+{
+    var rA, gA, bA;
+    var rB, gB, bB;
+    
+    var cA, mA, yA, kA;
+    var cB, mB, yB, kB;
+    
+    var c, m, y, k;
+    
+    var r,g,b;
+    var final;
+    
+    rA = Math.floor(c1/256/256);
+    gA = Math.floor((c1/256)%256);
+    bA = Math.floor(c1%256);
+    
+    rB = Math.floor(c2/256/256);
+    gB = Math.floor((c2/256)%256);
+    bB = Math.floor(c2%256);
+    
+    kA = 1-Math.max(rA/255, gA/255, bA/255);
+    kB = 1-Math.max(rB/255, gB/255, bB/255);
+    
+    cA = (1-rA/255-kA)/(1-kA);
+    mA = (1-gA/255-kA)/(1-kA);
+    yA = (1-bA/255-kA)/(1-kA);
+    
+    cB = (1-rB/255-kB)/(1-kB);
+    mB = (1-gB/255-kB)/(1-kB);
+    yB = (1-bB/255-kB)/(1-kB);
+    
+    k = kA*percent+kB*(1-percent);
+    m = mA*percent+mB*(1-percent);
+    y = yA*percent+yB*(1-percent);
+    c = cA*percent+cB*(1-percent);
+    
+    r = Math.round((c*(1-k)+k-1)*(-255));
+    g = Math.round((m*(1-k)+k-1)*(-255));
+    b = Math.round((y*(1-k)+k-1)*(-255));
+    
+    
+    return r*256*256+g*256+b;
+}
+
 function placeRoads()
 {
     
@@ -259,17 +305,13 @@ function placeRoads()
     {
         var value;
         var holder1, holder2;
-        if(timeScale < .33)
+        if(timeScale < 1/2)
         {
-            ctx.strokeStyle = "red";
+            ctx.strokeStyle = mixColors(16711680, 16776960, (1-timeScale*2)).toString(16);
         }
-        if(timeScale >=.33 && timeScale <.66)
+        else
         {
-            ctx.strokeStyle = "yellow";
-        }
-        if(timeScale >= .66)
-        {
-            ctx.strokeStyle = "green";
+            ctx.strokeStyle = mixColors(16776960, 32768, (1-(timeScale-.5)*2)).toString(16);
         }
         pX = exits[paths[j].a].x*scaler+x;
         pY = exits[paths[j].a].y*scaler+y;
