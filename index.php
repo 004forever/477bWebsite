@@ -48,8 +48,8 @@
                       }
                       ?>
                       $("#go").click(function(){
-                                     alert("go");
-                                     });
+                                     document.adjust.submit();
+                        });
                       $("#add").click(function(){
                                      document.adder.submit();
                                      });
@@ -73,11 +73,7 @@
 <div id="content">
         <canvas id = "canvas" width="600px" height="400px"></canvas>
         
-        <script>
-            var c = document.getElementById("canvas");
-            var ctx = c.getContext("2d");
-            ctx.fillStyle = "#FF0000";
-            ctx.fillRect(0,0,600,400);
+        <script src = "scripts/canvas.js">
         </script>
       
       <center>
@@ -104,11 +100,12 @@
 ADD
 </div>
 </form>
+    <form action = "scripts/runSimulation.php" method = "post" name = "adjust">
     <table id ="times">
     <tr>
     <td>Start Time</td>
     <td>
-    <select>
+    <select name = "start">
         <script>
             for(test = 0;test < 24;test++)
             {
@@ -127,7 +124,7 @@ ADD
     <tr>
     <td>End Time</td>
     <td>
-    <select>
+    <select name = "end">
         <script>
             for(test = 0;test < 24;test++)
             {
@@ -144,6 +141,7 @@ ADD
     </select>
     </td></tr>
     </table>
+    </form>
 <br>
 </div>
 </body>

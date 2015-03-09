@@ -40,7 +40,7 @@
                       $check = mysql_query("SELECT name FROM runs WHERE user_id='".$_SESSION['user_id']."'");
                       while($row = mysql_fetch_row($check))
                       {
-                      echo("$(\"#".$row[0]."\").click(function(){setting = \"".$row[0]."\";window.open (\"scripts/switch.php?selection=".$row[0]."&last=settings\",'_self',false);});");
+                      echo("$(\"#".$row[0]."\").click(function(){setting = \"".$row[0]."\";window.open (\"scripts/switch.php?selection=".$row[0]."&last=matrix\",'_self',false);});");
                       }
                       ?>
                       $("#go").click(function(){
@@ -70,7 +70,6 @@
 
 
         <?php
-            echo ("SELECT matrix FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
             $check = mysql_query("SELECT matrix FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
             $row = mysql_fetch_row($check);
             parse_str($row[0], $elements);
