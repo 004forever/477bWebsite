@@ -209,9 +209,9 @@ function downClick(event)
     }
     else
     {
-        var scaler = (1-scale)*(1-scale)*(max-min)+min;
-        exits[exits.length]={x:(event.x-canvas.offsetLeft-x)/scaler, y:(event.y-canvas.offsetTop-y)/scaler, next:exits.length+1, exit:true};
-        alert(""+exits[exits.length-1].x+" "+exits[exits.length-1].y);
+        //var scaler = (1-scale)*(1-scale)*(max-min)+min;
+        //exits[exits.length]={x:(event.x-canvas.offsetLeft-x)/scaler, y:(event.y-canvas.offsetTop-y)/scaler, next:exits.length+1, exit:true};
+        //alert(""+exits[exits.length-1].x+" "+exits[exits.length-1].y);
         clickDown = true;
         startX = event.x;
         startY = event.y;
@@ -311,22 +311,37 @@ function mixColors(c1, c2, percent)
     return r*256*256+g*256+b;
 }
 
+var speedData;
+var ready = false;
+
 function placeRoads()
 {
     
     var pX, pY;
     var scaler = (1-scale)*(1-scale)*(max-min)+min;
+    
+    $.ajax({
+           async: false,
+           url: "sample_speed",
+           dataType: "json",
+           success: function(data) {
+           speedData = data;
+           }
+           });
     for(var j = 0;j < paths.length;j++)
     {
         var value;
         var holder1, holder2;
-        if(timeScale < 1/2)
+        
+        var speed = ((speedData[j])*timeScale+(speedData[j+69])*(1-timeScale))/80;
+        
+        if(speed < 1/2)
         {
-            ctx.strokeStyle = mixColors(16711680, 16776960, (1-timeScale*2)).toString(16);
+            ctx.strokeStyle = mixColors(16711680, 16776960, (1-speed*2)).toString(16);
         }
         else
         {
-            ctx.strokeStyle = mixColors(16776960, 32768, (1-(timeScale-.5)*2)).toString(16);
+            ctx.strokeStyle = mixColors(16776960, 32768, (1-(speed-.5)*2)).toString(16);
         }
         pX = exits[paths[j].a].x*scaler+x;
         pY = exits[paths[j].a].y*scaler+y;
