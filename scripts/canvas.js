@@ -120,12 +120,6 @@ exits[62] = {x:273,y:-50,exit:true};
 exits[63] = {x:157,y:-44,exit:true};
 exits[64] = {x:145,y:-44,exit:true};
 
-             var answer = findPoint(34.018152, -118.291469);
-
-alert(""+answer.x+" "+answer.y);
-
-exits[65] = {x: answer.x, y:answer.y, exit:true};
-
 paths[0] = {a:0,b:1};
 paths[1] = {a:1,b:2};
 paths[2] = {a:2,b:3};
@@ -351,14 +345,7 @@ function placeRoads()
         if(exits[i].exit)
         {
             ctx.beginPath();
-            if(i == 65)
-            {
-                ctx.fillStyle = "#888888";
-            }
-            else
-            {
-                ctx.fillStyle = "#000000";
-            }
+            ctx.fillStyle = "#000000";
             ctx.arc(pX, pY, 7, 0, 2 * Math.PI, false);
             ctx.fill();
         }
