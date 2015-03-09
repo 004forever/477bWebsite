@@ -36,7 +36,23 @@ var centerTimeY = timeY +timeH/2;
 
     var exits = [];
     var paths = [];
-paths[0] = {a: 0, b: 1};
+
+//locations
+
+//-148.50451656072266 -23.8474406155905 is 34.025408  / -118.291640
+
+//75.22330305798893 -119.80007524050087 is 34.055249/ -118.214152
+
+function findPoint(lat, long)
+{
+    var x, y;
+    
+    x = 2887.25763497193*long+341389.93622679;
+    
+    y = lat*(-3215.46310863896)+109383.596739774;
+    
+    return {x:x, y:y};
+}
 
 exits[0] = {x:-284,y:-52,exit:true};
 exits[1] = {x:-237,y:-59,exit:true};
@@ -71,7 +87,7 @@ exits[29] = {x:143,y:-6,exit:true};
 exits[30] = {x:130,y:-10,exit:true};
 exits[31] = {x:103,y:-24,exit:true};
 exits[32] = {x:75,y:-34,exit:false};
-exits[33] = {x:35,y:-34,exit:false};
+exits[33] = {x:35,y:-34,exit:true};
 exits[34] = {x:9,y:-25,exit:true};
 exits[35] = {x:-46,y:-36,exit:true};
 exits[36] = {x:55,y:-52,exit:false};
@@ -104,7 +120,11 @@ exits[62] = {x:273,y:-50,exit:true};
 exits[63] = {x:157,y:-44,exit:true};
 exits[64] = {x:145,y:-44,exit:true};
 
+             var answer = findPoint(34.018152, -118.291469);
 
+alert(""+answer.x+" "+answer.y);
+
+exits[65] = {x: answer.x, y:answer.y, exit:true};
 
 paths[0] = {a:0,b:1};
 paths[1] = {a:1,b:2};
@@ -195,8 +215,9 @@ function downClick(event)
     }
     else
     {
-        //var scaler = (1-scale)*(1-scale)*(max-min)+min;
-        //exits[exits.length]={x:(event.x-canvas.offsetLeft-x)/scaler, y:(event.y-canvas.offsetTop-y)/scaler, next:exits.length+1, exit:true};
+        var scaler = (1-scale)*(1-scale)*(max-min)+min;
+        exits[exits.length]={x:(event.x-canvas.offsetLeft-x)/scaler, y:(event.y-canvas.offsetTop-y)/scaler, next:exits.length+1, exit:true};
+        alert(""+exits[exits.length-1].x+" "+exits[exits.length-1].y);
         clickDown = true;
         startX = event.x;
         startY = event.y;
@@ -330,7 +351,14 @@ function placeRoads()
         if(exits[i].exit)
         {
             ctx.beginPath();
-            ctx.fillStyle = "#000000";
+            if(i == 65)
+            {
+                ctx.fillStyle = "#888888";
+            }
+            else
+            {
+                ctx.fillStyle = "#000000";
+            }
             ctx.arc(pX, pY, 7, 0, 2 * Math.PI, false);
             ctx.fill();
         }

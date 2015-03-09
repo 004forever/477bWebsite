@@ -48,8 +48,8 @@
                       }
                       ?>
                       $("#go").click(function(){
-                                     alert("go");
-                                     });
+                                     document.adjust.submit();
+                        });
                       $("#add").click(function(){
                                      document.adder.submit();
                                      });
@@ -100,11 +100,12 @@
 ADD
 </div>
 </form>
+    <form action = "scripts/runSimulation.php" method = "post" name = "adjust">
     <table id ="times">
     <tr>
     <td>Start Time</td>
     <td>
-    <select>
+    <select name = "start">
         <script>
             for(test = 0;test < 24;test++)
             {
@@ -123,7 +124,7 @@ ADD
     <tr>
     <td>End Time</td>
     <td>
-    <select>
+    <select name = "end">
         <script>
             for(test = 0;test < 24;test++)
             {
@@ -140,6 +141,7 @@ ADD
     </select>
     </td></tr>
     </table>
+    </form>
 <br>
 </div>
 </body>
