@@ -34,8 +34,20 @@ var timeH = dim/2;
 var centerTimeX = timeX+timeW*timeScale;
 var centerTimeY = timeY +timeH/2;
 
+var exitSize = 7;
+
     var exits = [];
     var paths = [];
+
+var editMode = false;
+var tempPaths = [];
+var tempExits = [];
+var tempDot;
+
+//image code
+var imageObj = new Image();
+imageObj.onload = function(){draw()};
+imageObj.src = 'map.gif';
 
 //locations
 
@@ -190,6 +202,24 @@ paths[66] = {a:63, b:61};
 paths[67] = {a:63, b:64};
 paths[68] = {a:64, b:32};
 
+function getDot(x, y)
+{
+    var result =""+x+" "+y;
+    for(var i = 0; i < tempExits.length;i++)
+    {
+        result = result + ("\n"+tempExits[i].x+" "+tempExits[i].y);
+        if((x-tempExits[i].x)*
+           (x-tempExits[i].x)+
+           (y-tempExits[i].y)*
+           (y-tempExits[i].y) < exitSize*exitSize)
+        {
+            //alert(result);
+            return i;
+        }
+    }
+    //alert(result);
+    return -1;
+}
 
 function downClick(event)
 {
@@ -207,16 +237,61 @@ function downClick(event)
     {
         timeDown = true;
     }
+    else if(event.x-canvas.offsetLeft >= 10 &&
+            event.x-canvas.offsetLeft < 70 &&
+            event.y-canvas.offsetTop >=10 &&
+            event.y-canvas.offsetTop <30)
+    {
+        if(editMode)
+        {
+            editMode = false;
+            paths = tempPaths;
+            exits = tempExits;
+            //TODO add code to save changes to server
+        }
+        else
+        {
+            editMode = true;
+            tempPaths = [];
+            tempExits = [];
+            drag = 0;
+            var pic = prompt("Map Image URL", "");
+            imageObj.src = pic;
+            
+        }
+        
+    }
+    else if(event.x-canvas.offsetLeft >= 10 &&
+            event.x-canvas.offsetLeft < 70 &&
+            event.y-canvas.offsetTop >=40 &&
+            event.y-canvas.offsetTop <60)
+    {
+        drag++;
+        if(drag >= 3)
+        {
+            drag = 0;
+        }
+    }
     else
     {
-        //var scaler = (1-scale)*(1-scale)*(max-min)+min;
-        //exits[exits.length]={x:(event.x-canvas.offsetLeft-x)/scaler, y:(event.y-canvas.offsetTop-y)/scaler, next:exits.length+1, exit:true};
-        //alert(""+exits[exits.length-1].x+" "+exits[exits.length-1].y);
-        clickDown = true;
-        startX = event.x;
-        startY = event.y;
-        orgX = x;
-        orgY = y;
+        if(drag == 1 && editMode)
+        {
+            var scaler = (1-scale)*(1-scale)*(max-min)+min;
+            tempExits[tempExits.length]={x:(event.x-canvas.offsetLeft-x)/scaler, y:(event.y-canvas.offsetTop-y)/scaler, next:exits.length+1, exit:true};
+        }
+        else if(drag == 2 && editMode)
+        {
+            var scaler = (1-scale)*(1-scale)*(max-min)+min;
+            tempDot = getDot((event.x-canvas.offsetLeft-x)/scaler, (event.y-canvas.offsetTop-y)/scaler);
+        }
+        else
+        {
+            clickDown = true;
+            startX = event.x;
+            startY = event.y;
+            orgX = x;
+            orgY = y;
+        }
     }
     draw();
 }
@@ -253,11 +328,22 @@ function moveAround(event)
     }
 }
 
+
 function upClick(event)
 {
     clickDown = false;
     scrollDown = false;
     timeDown = false;
+    if(editMode && drag == 2)
+    {
+        var scaler = (1-scale)*(1-scale)*(max-min)+min;
+        var temp = getDot((event.x-canvas.offsetLeft-x)/scaler, (event.y-canvas.offsetTop-y)/scaler);
+        if(tempDot != -1 && temp != -1 && tempDot != temp)
+        {
+            tempPaths[tempPaths.length]={a:tempDot, b:temp};
+        }
+    }
+    draw();
 }
 
 
@@ -328,7 +414,7 @@ function placeRoads()
            speedData = data;
            }
            });
-    for(var j = 0;j < paths.length;j++)
+    for(var j = 0;j < paths.length || j < tempPaths.length;j++)
     {
         var value;
         var holder1, holder2;
@@ -343,26 +429,75 @@ function placeRoads()
         {
             ctx.strokeStyle = mixColors(16776960, 32768, (1-(speed-.5)*2)).toString(16);
         }
-        pX = exits[paths[j].a].x*scaler+x;
-        pY = exits[paths[j].a].y*scaler+y;
+        if(!editMode)
+        {
+            if(j < paths.length)
+            {
+                pX = exits[paths[j].a].x*scaler+x;
+                pY = exits[paths[j].a].y*scaler+y;
+            }
+        }
+        else
+        {
+            if(j < tempPaths.length)
+            {
+                pX = tempExits[tempPaths[j].a].x*scaler+x;
+                pY = tempExits[tempPaths[j].a].y*scaler+y;
+            }
+        }
         ctx.lineWidth = 5;
         ctx.beginPath();
         ctx.moveTo(pX,pY);
-        pX = exits[paths[j].b].x*scaler+x;
-        pY = exits[paths[j].b].y*scaler+y;
+        if(!editMode)
+        {
+            if(j < paths.length)
+            {
+                pX = exits[paths[j].b].x*scaler+x;
+                pY = exits[paths[j].b].y*scaler+y;
+            }
+        }
+        else
+        {
+            if(j < tempPaths.length)
+            {
+                pX = tempExits[tempPaths[j].b].x*scaler+x;
+                pY = tempExits[tempPaths[j].b].y*scaler+y;
+            }
+        }
         ctx.lineTo(pX, pY);
         ctx.stroke();
     }
-    for(var i = 0;i < exits.length;i++)
+    for(var i = 0;i < exits.length || i < tempExits.length;i++)
     {
-        pX = exits[i].x*scaler + x;
-        pY = exits[i].y*scaler + y;
-        if(exits[i].exit)
+        if(!editMode)
         {
-            ctx.beginPath();
-            ctx.fillStyle = "#000000";
-            ctx.arc(pX, pY, 7, 0, 2 * Math.PI, false);
-            ctx.fill();
+            if(i < exits.length)
+            {
+                pX = exits[i].x*scaler + x;
+                pY = exits[i].y*scaler + y;
+                if(exits[i].exit)
+                {
+                    ctx.beginPath();
+                    ctx.fillStyle = "#000000";
+                    ctx.arc(pX, pY, exitSize, 0, 2 * Math.PI, false);
+                    ctx.fill();
+                }
+            }
+        }
+        else
+        {
+            if(i < tempExits.length)
+            {
+                pX = tempExits[i].x*scaler + x;
+                pY = tempExits[i].y*scaler + y;
+                if(tempExits[i].exit)
+                {
+                    ctx.beginPath();
+                    ctx.fillStyle = "#000000";
+                    ctx.arc(pX, pY, exitSize, 0, 2 * Math.PI, false);
+                    ctx.fill();
+                }
+            }
         }
     }
 }
@@ -387,11 +522,39 @@ function draw()
     ctx.beginPath();
     ctx.arc(centerTimeX, centerTimeY, radius, 0, 2 * Math.PI, false);
     ctx.fill();
+    
+    if(editMode)
+    {
+        ctx.fillStyle = "#FF0000";
+        ctx.fillRect(10,10,60, 20);
+        ctx.fillStyle = "#FFFFFF";
+        ctx.font = "bold 16px Arial";
+        ctx.fillText("Save?", 15, 25);
+        ctx.fillStyle = "#888888";
+        ctx.fillRect(10,40,60,20);
+        ctx.fillStyle = "#000000";
+        if(drag == 0)
+        {
+            ctx.fillText("None", 15, 55);
+        }
+        if(drag == 1)
+        {
+            ctx.fillText("Exit", 15, 55);
+        }
+        if(drag == 2)
+        {
+            ctx.fillText("Path", 15, 55);
+        }
+    }
+    else
+    {
+        ctx.fillStyle = "#888888";
+        ctx.fillRect(10,10,60, 20);
+        ctx.fillStyle = "#000000";
+        ctx.font = "bold 16px Arial";
+        ctx.fillText("Edit", 15, 25);
+    }
 }
-
-var imageObj = new Image();
-imageObj.onload = function(){draw()};
-imageObj.src = 'map.gif';
 
 
 //ctx.fillStyle = "#FFFF00";
