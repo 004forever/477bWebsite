@@ -43,6 +43,7 @@ var editMode = false;
 var tempPaths = [];
 var tempExits = [];
 var tempDot;
+var drag = 0;
 
 //image code
 var imageObj = new Image();
@@ -251,12 +252,17 @@ function downClick(event)
         }
         else
         {
-            editMode = true;
-            tempPaths = [];
-            tempExits = [];
-            drag = 0;
             var pic = prompt("Map Image URL", "");
-            imageObj.src = pic;
+            if(pic!=null && pic != "")
+            {
+                imageObj.src = pic;
+                editMode = true;
+                tempPaths = [];
+                tempExits = [];
+                drag = 0;
+
+            }
+            
             
         }
         
@@ -264,7 +270,7 @@ function downClick(event)
     else if(event.x-canvas.offsetLeft >= 10 &&
             event.x-canvas.offsetLeft < 70 &&
             event.y-canvas.offsetTop >=40 &&
-            event.y-canvas.offsetTop <60)
+            event.y-canvas.offsetTop <60 && editMode)
     {
         drag++;
         if(drag >= 3)
