@@ -67,6 +67,19 @@ function findPoint(lat, long)
     return {x:x, y:y};
 }
 
+
+function findLatLong(x, y)
+{
+    var lat, long;
+    
+    long = (x - 341389.93622679)/2887.25763497193;
+    
+    lat = (y - 109383.596739774)/(-3215.46310863896);
+    
+    return {lat:lat, long:long};
+}
+
+
 exits[0] = {x:-284,y:-52,exit:true};
 exits[1] = {x:-237,y:-59,exit:true};
 exits[2] = {x:-222,y:-59,exit:true};
