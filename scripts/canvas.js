@@ -416,28 +416,104 @@ function mixColors(c1, c2, percent)
     return r*256*256+g*256+b;
 }
 
-var speedData;
-var ready = false;
+var speedData  = [];
+var calculated = false;
+
+function callback(response, status) {
+    if (status == google.maps.DistanceMatrixStatus.OK) {
+        var origins = response.originAddresses;
+        var destinations = response.destinationAddresses;
+        for (var i = 0; i < origins.length; i++) {
+            var results = response.rows[i].elements;
+            for (var j = 0; j < results.length; j++) {
+                var element = results[j];
+                speedData[speedData.length] = element.distance.value/1000/1.61/(element.duration.value/60/60);
+            }
+            
+        }
+        calculated = true;
+        drawRoads();
+    }
+    else
+    {
+        //alert("nope");
+    }
+}
 
 function placeRoads()
 {
-    
     var pX, pY;
-    var scaler = (1-scale)*(1-scale)*(max-min)+min;
-    
-    $.ajax({
-           async: false,
-           url: "sample_speed",
-           dataType: "json",
-           success: function(data) {
-           speedData = data;
-           }
-           });
+    if(!calculated)
+    {
+        for(var j = 0;j < paths.length;j++)
+        {
+        var origins = [];
+        var dests = [];
+        var start, end;
+        start = findLatLong(exits[paths[j].a].x, exits[paths[j].a].y);
+        end = findLatLong(exits[paths[j].b].x, exits[paths[j].b].y);
+        var origin = new google.maps.LatLng(start.lat, start.long);
+        var dest = new google.maps.LatLng(end.lat, end.long);
+        origins[origins.length] = origin;
+        dests[dests.length] = dest;
+        //var myURL = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+end.lat+","+end.long+"&destinations="+start.lat+","+start.long+"&mode=car&language=en-EN&depature_time="+(new Date).getTime();
+        var service = new google.maps.DistanceMatrixService();
+            var date = new Date();
+            date.setHours(23);
+            date.setMinutes(0);
+            date.setSeconds(0);
+        service.getDistanceMatrix(
+                              {
+                              origins: origins,
+                              destinations: dests,
+                              travelMode: google.maps.TravelMode.DRIVING,
+                                  durationInTraffic: true,
+                                  transitOptions:{
+                                    departureTime: date
+                                  }
+                              }, callback);
+        }
+        for(var j = 0;j < paths.length;j++)
+        {
+            var origins = [];
+            var dests = [];
+            var start, end;
+            start = findLatLong(exits[paths[j].a].x, exits[paths[j].a].y);
+            end = findLatLong(exits[paths[j].b].x, exits[paths[j].b].y);
+            var origin = new google.maps.LatLng(start.lat, start.long);
+            var dest = new google.maps.LatLng(end.lat, end.long);
+            origins[origins.length] = origin;
+            dests[dests.length] = dest;
+            //var myURL = "https://maps.googleapis.com/maps/api/distancematrix/json?origins="+end.lat+","+end.long+"&destinations="+start.lat+","+start.long+"&mode=car&language=en-EN&depature_time="+(new Date).getTime();
+            var service = new google.maps.DistanceMatrixService();
+            var date = new Date();
+            date.setHours(22);
+            date.setMinutes(0);
+            date.setSeconds(0);
+            service.getDistanceMatrix(
+                                      {
+                                      origins: origins,
+                                      destinations: dests,
+                                      travelMode: google.maps.TravelMode.DRIVING,
+                                      durationInTraffic: true,
+                                      transitOptions:{
+                                      departureTime: date
+                                      }
+                                      }, callback);
+        }
+    }
+    else
+    {
+        drawRoads();
+    }
+}
+function drawRoads()
+{
+        var scaler = (1-scale)*(1-scale)*(max-min)+min;
     for(var j = 0;j < paths.length || j < tempPaths.length;j++)
     {
         var value;
         var holder1, holder2;
-        
         var speed = ((speedData[j])*timeScale+(speedData[j+69])*(1-timeScale))/80;
         
         if(speed < 1/2)
