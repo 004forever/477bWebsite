@@ -9,9 +9,9 @@ class Edge extends Road {
 
     public function __construct(&$s, &$e, $d) {
         parent::__construct();
-        $this->start = $s;
+        $this->start = &$s;
         $this->start->addConn($this);
-        $this->end = $e;
+        $this->end = &$e;
         $this->cars_per_hour = 0;
     }
 
@@ -19,19 +19,20 @@ class Edge extends Road {
         return $this->end;
     }
 
-    public function putCar($car) {
+    public function putCar(&$car) {
         $car->edgeLength = $this->distance;
         parent::putCar($car);
     }
 
     public function tick() {
         $keys = array();
-        foreach ($this->cars as $k => $c) {
+        foreach ($this->cars as $k => &$c) {
             $c->edgeLength -= $this->getSpeed() / 60 * $GLOBALS['tick_time_s'];
             if ($c->edgeLength <= 0) {
                 $this->end->putCar($c);
                 $keys[] = $k;
-                Utils::debug_echo('car reached end of edge and will move to '.$this->end->id);
+                $c->popNode();
+                Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id.' on the way to '.$c->nextNode()->id);
             }
         }
         $this->cars = Utils::arr_rm($this->cars, $keys);
