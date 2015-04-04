@@ -79,7 +79,7 @@ function findLatLong(x, y)
     return {lat:lat, long:long};
 }
 
-var checkinger = 48;
+var checkinger = -1;
 
 exits[0] = {x:-282.828403512773,y:-53.8284186398814,exit:true};//{x:-284,y:-52,exit:true};
 exits[1] = {x:-235.038515138731,y:-57.8863330829918,exit:true};//{x:-237,y:-59,exit:true};
@@ -424,7 +424,101 @@ function mixColors(c1, c2, percent)
 }
 
 var speedData  = [];
-var calculated = false;
+var calculated = false;//test
+var started = true;
+var matrix = [];
+var alerts = false;
+var a, b;
+
+function parse(response, status) {
+    //alert("callback");
+    if (status == google.maps.DistanceMatrixStatus.OK) {
+        var origins = response.originAddresses;
+        var destinations = response.destinationAddresses;
+        for (var i = 0; i < origins.length; i++) {
+            if(b == 0)
+                matrix[a*10+i] = [];
+            var results = response.rows[i].elements;
+            for (var j = 0; j < results.length; j++) {
+                var element = results[j];
+                matrix[a*10+i][b*10+j] = element.distance.value;
+            }
+            
+        }
+        //alert(a+" "+b);
+        b++;
+        if(b > exits.length/10)
+        {
+            b = 0;
+            a++;
+        }
+        if(a > exits.length/10)
+        {
+            alert(matrix);
+        }
+        else
+        {
+            getMatrix();
+        }
+    }
+    if(status == google.maps.DistanceMatrixStatus.INVALID_REQUEST && alerts)
+    {
+        alert("INVALID_REQUEST");
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.MAX_ELEMENTS_EXCEEDED && alerts)
+    {
+        alert("MAX_ELEMENTS_EXCEEDED");
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.OVER_QUERY_LIMIT)
+    {
+        //alert("OVER_QUERY_LIMIT");
+        draw();
+        setTimeout(getMatrix(), 10000);
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.REQUEST_DENIED && alerts)
+    {
+        alert("REQUEST_DENIED");
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.UNKNOWN_ERROR && alerts)
+    {
+        alert("UNKNOWN_ERROR");
+        alerts = false;
+    }
+}
+
+function getMatrix()
+{
+    var origin, dest;
+    var origins = [];
+    var dests = [];
+    var start,end;
+    var service = new google.maps.DistanceMatrixService();
+    for(var i = a*10; i < (a+1)*10 && i < exits.length;i++)//for(var i =0; i < exits.length;i++)
+    {
+            start = findLatLong(exits[i].x, exits[i].y);
+            origin = new google.maps.LatLng(start.lat, start.long);
+            origins[origins.length] = origin;
+    }
+    dests = [];
+    for(var j = b*10; j < (b+1)*10 && j < exits.length;j++)//for(var j = 0;j < exits.length;j++)
+    {
+        end = findLatLong(exits[paths[j].b].x, exits[paths[j].b].y);
+        dest = new google.maps.LatLng(end.lat, end.long);
+        dests[dests.length] = dest;
+    }
+    service.getDistanceMatrix(
+                              {
+                              origins: origins,
+                              destinations: dests,
+                              travelMode: google.maps.TravelMode.DRIVING,
+                              durationInTraffic: false,
+                              }, parse);
+}
+
 
 function callback(response, status) {
     if (status == google.maps.DistanceMatrixStatus.OK) {
@@ -441,15 +535,41 @@ function callback(response, status) {
         calculated = true;
         drawRoads();
     }
-    else
+    if(status == google.maps.DistanceMatrixStatus.INVALID_REQUEST && alerts)
     {
-        //alert("nope");
+        alert("INVALID_REQUEST");
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.MAX_ELEMENTS_EXCEEDED && alerts)
+    {
+        alert("MAX_ELEMENTS_EXCEEDED");
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.OVER_QUERY_LIMIT && alerts)
+    {
+        alert("OVER_QUERY_LIMIT");
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.REQUEST_DENIED && alerts)
+    {
+        alert("REQUEST_DENIED");
+        alerts = false;
+    }
+    if(status == google.maps.DistanceMatrixStatus.UNKNOWN_ERROR && alerts)
+    {
+        alert("UNKNOWN_ERROR");
+        alerts = false;
     }
 }
+
 
 function placeRoads()
 {
     var pX, pY;
+    //started = true;
+    //a = 0;
+    //b = 0;
+    //getMatrix();
     if(!calculated)
     {
         for(var j = 0;j < paths.length;j++)
@@ -516,7 +636,7 @@ function placeRoads()
 }
 function drawRoads()
 {
-        var scaler = (1-scale)*(1-scale)*(max-min)+min;
+    var scaler = (1-scale)*(1-scale)*(max-min)+min;
     for(var j = 0;j < paths.length || j < tempPaths.length;j++)
     {
         var value;
@@ -613,6 +733,7 @@ function draw()
         ctx.fillStyle = "#FFFFFF";
         ctx.fillRect ( 0 , 0 , canvas.width, canvas.height );
     ctx.drawImage(imageObj, x-canvas.width*scaler/2, y-canvas.height*scaler/2, canvas.width*scaler, canvas.height*scaler);
+    //if(!started)
         placeRoads();
     ctx.fillStyle = "#888888";
     ctx.fillRect(barX,barY,barW,barH);
@@ -656,7 +777,8 @@ function draw()
         ctx.fillRect(10,10,60, 20);
         ctx.fillStyle = "#000000";
         ctx.font = "bold 16px Arial";
-        ctx.fillText("Edit", 15, 25);
+        var title = a+" "+b;
+        ctx.fillText("Edit", 15, 25);//Edit
     }
 }
 
