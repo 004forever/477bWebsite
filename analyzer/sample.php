@@ -4,6 +4,7 @@ require_once(__DIR__.'/autoload.php');
 
 $GLOBALS['tick_time_s']=1;//1 second per tick
 $GLOBALS['max_speed_mph']=70;//70mph is max speed
+$GLOBALS['debug']=true;
 
 $engine = new Engine();
 
@@ -23,8 +24,8 @@ $car = new Car($node4);
 $car->setPath(array($node2,$node3,$node4));
 $node1->putCar($car);
 $car = new Car($node4);
-$car->setPath(array($node2,$node3,$node4));
-$node1->putCar($car);
+$car->setPath(array($node3,$node4));
+$node2->putCar($car);
 $car = new Car($node4);
 $car->setPath(array($node4));
 $node3->putCar($car);

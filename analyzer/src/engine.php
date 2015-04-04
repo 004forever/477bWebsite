@@ -20,17 +20,27 @@ class Engine {
 
     public function start() {
 
-        $done = false;
-        while (!$done) {
-            $done = true;
+        while (true) {
+            echo "tick\n";
             $this->tick();
-            foreach ($this->nodes as $n) {
-                if ($n->hasCars()) {
-                    $done = false;
-                    break;
-                }
+            if ($this->noCarsInSystem()) {
+                break;
             }
         }
+    }
+
+    private function noCarsInSystem() {
+        foreach ($this->nodes as $n) {
+            if ($n->hasCars()) {
+                return false;
+            }
+        }
+        foreach ($this->edges as $n) {
+            if ($n->hasCars()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function tick() {

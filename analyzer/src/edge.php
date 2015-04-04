@@ -1,23 +1,27 @@
 <?php
 
-class Edge {
+class Edge extends Road {
 
     private $start; //start node
     private $end;
     private $distance; //distance in miles
-    private $cars;
     private $cars_per_hour;
 
     public function __construct(&$s, &$e, $d) {
+        parent::__construct();
         $this->start = $s;
         $this->start->addConn($this);
         $this->end = $e;
-        $this->cars = array();
         $this->cars_per_hour = 0;
     }
 
-    public function getEnd() {
+    public function &getEnd() {
         return $this->end;
+    }
+
+    public function putCar($car) {
+        $car->edgeLength = $this->distance;
+        parent::putCar($car);
     }
 
     public function tick() {
@@ -30,11 +34,6 @@ class Edge {
             }
         }
         $this->cars = Utils::arr_rm($this->cars, $keys);
-    }
-
-    public function putCar($car) {
-        $car->edgeLength = $this->distance;
-        $this->cars[] = $car;
     }
 
     public function getSpeed() {
