@@ -19,7 +19,6 @@ class Engine {
     }
 
     public function start() {
-
         while (true) {
             echo "tick\n";
             $this->tick();

@@ -31,6 +31,7 @@ class Edge extends Road {
             if ($c->edgeLength <= 0) {
                 $this->end->putCar($c);
                 $keys[] = $k;
+                Utils::debug_echo('car reached end of edge and will move to '.$this->end->id);
             }
         }
         $this->cars = Utils::arr_rm($this->cars, $keys);
@@ -38,10 +39,10 @@ class Edge extends Road {
 
     public function getSpeed() {
         if ($this->cars_per_hour == 0) {
-            return $GLOBALS['max_mph'];
+            return $GLOBALS['max_speed_mph'];
         }
         $speed = (count($this->cars) / distance / $this->cars_per_hour);
-        return $speed > $GLOBALS['max_mph'] ? $GLOBALS['max_mph'] : $speed;
+        return $speed > $GLOBALS['max_speed_mph'] ? $GLOBALS['max_speed_mph'] : $speed;
     }
 
 }

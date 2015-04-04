@@ -14,7 +14,7 @@ $node3 = new Node();
 $node4 = new Node();
 
 $edge1 = new Edge($node1,$node2,1);
-$edge2 = new Edge($node2,$node3,.5);
+$edge2 = new Edge($node2,$node3,2);
 $edge3 = new Edge($node3,$node4,3);
 
 $car = new Car($node4);
@@ -39,7 +39,16 @@ $engine->addEdge($edge1);
 $engine->addEdge($edge2);
 $engine->addEdge($edge3);
 
+echo 'node1 is '.$node1->id;
+echo "\n".'edge1 is'.$edge1->id;
+echo "\n".'node2 is '.$node2->id;
+echo "\n".'edge2 is'.$edge2->id;
+echo "\n".'node3 is '.$node3->id;
+echo "\n".'edge3 is'.$edge3->id;
+echo "\n".'node4 is '.$node4->id;
+
 $engine->start();
+
 
 echo 'done';
 
