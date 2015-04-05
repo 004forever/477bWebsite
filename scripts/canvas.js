@@ -424,10 +424,10 @@ function mixColors(c1, c2, percent)
 }
 
 var speedData  = [];
-var calculated = false;//test
+var calculated = false;
 var started = true;
 var matrix = [];
-var alerts = false;
+var alerts = true;
 var a, b;
 
 function parse(response, status) {
@@ -446,6 +446,7 @@ function parse(response, status) {
             
         }
         //alert(a+" "+b);
+        draw();
         b++;
         if(b > exits.length/10)
         {
@@ -454,11 +455,25 @@ function parse(response, status) {
         }
         if(a > exits.length/10)
         {
-            alert(matrix);
+            var string, count;
+            count = 0;
+            string = "";
+            for(var i =0;i < paths.length;i++)
+            {
+                string+= i+" "+paths[i].a+" "+paths[i].b+" "+(matrix[paths[i].a][paths[i].b]/1609.344)+" "+(matrix[paths[i].b][paths[i].a]/1609.334)+"\n";
+                count++;
+                if(count == 10 || i == paths.length-1)
+                {
+                    alert(string);
+                    count = 0;
+                    string = "";
+                }
+            }
+            //alert(matrix);
         }
         else
         {
-            getMatrix();
+            setTimeout("getMatrix()", 10000);
         }
     }
     if(status == google.maps.DistanceMatrixStatus.INVALID_REQUEST && alerts)
@@ -474,8 +489,8 @@ function parse(response, status) {
     if(status == google.maps.DistanceMatrixStatus.OVER_QUERY_LIMIT)
     {
         //alert("OVER_QUERY_LIMIT");
-        draw();
-        setTimeout(getMatrix(), 10000);
+        //draw();
+        setTimeout("getMatrix()", 10000);
         alerts = false;
     }
     if(status == google.maps.DistanceMatrixStatus.REQUEST_DENIED && alerts)
@@ -566,10 +581,10 @@ function callback(response, status) {
 function placeRoads()
 {
     var pX, pY;
-    //started = true;
-    //a = 0;
-    //b = 0;
-    //getMatrix();
+    /*started = true;
+    a = 0;
+    b = 0;
+    getMatrix();*/
     if(!calculated)
     {
         for(var j = 0;j < paths.length;j++)
