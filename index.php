@@ -101,7 +101,7 @@
 ADD
 </div>
 </form>
-    <form action = "scripts/runSimulation.php" method = "post" name = "adjust">
+    <form action = "analyzer/losangeles.php" method = "post" name = "adjust">
     <table id ="times">
     <tr>
     <td>Start Time</td>

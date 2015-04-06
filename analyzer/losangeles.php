@@ -6,6 +6,21 @@ $GLOBALS['tick_time_s']=1;//1 second per tick
 $GLOBALS['max_speed_mph']=70;//70mph is max speed
 $GLOBALS['debug']=true;
 
+    //phpinfo();
+    
+    session_start();
+    $_SESSION['user_id'] = 0;
+    $con=mysql_connect("localhost","four","password");
+    if (!$con) {
+        die('Could not connect to MySQL: ' . mysql_error());
+    }
+    else{
+        if ( !mysql_select_db("477b"))
+        {
+            echo "Can't connect to 477b";
+        }
+    }
+
     
     $node = array();
     $edge = array();
@@ -171,19 +186,45 @@ $engine = new Engine();
         $engine->addEdge($edge[$i]);
     }
 
-    for($i = 0;$i < 142;$i++)
+    /*for($i = 0;$i < 142;$i++)
     {
         if($i < 67)
             echo 'node'.$i.' is '.$node[$i]->id."\n";
         echo 'edge'.$i.' is '.$edge[$i]->id."\n";
-    }
+    }*/
 
 //TODO spawn of car here with destination ie $car=new Car($destinationNode)
 //next add it to the node that it starts in ie $startNode->putCar($car)
+    
+    $check = mysql_query("SELECT matrix FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
+    $row = mysql_fetch_row($check);
+    ini_set('max_input_vars', 5000);
+    parse_str($row[0], $elements);
+    ini_restore('max_input_vars');
+    $size = 66;
+    for($i = 0;$i <= $size;$i++)
+    {
+        for($j = 0;$j <= $size;$j++)
+        {
+            if($j != $i)
+            {
+                for($k = 0;$k < $elements["".$i."-".$j];$k++)
+                {
+                    $car = new Car($node[$j]);
+                    $node[$i]->putCar($car);
+                }
+            }
+        }
+    }
 
 $engine->autoRoute();
 
 $engine->start();
 
 echo 'done';
+    
+    for($i = 0;$i < 142;$i++)
+    {
+        echo $edge[$i]->getSpeed();
+    }
 ?>
