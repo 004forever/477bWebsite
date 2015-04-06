@@ -22,7 +22,7 @@ class Engine {
         while (true) {
             echo "tick\n";
             $this->tick();
-            //$this->printStatus();
+            $this->printStatus();
             if ($this->noCarsInSystem()) {
                 break;
             }
@@ -33,7 +33,7 @@ class Engine {
         foreach ($this->nodes as $n) {
             echo 'node ' . $n->id . ' with ' . $n->getCarSize() . ' cars: ' . "\n";
             foreach ($n->connections as $con) {
-                echo "\tconnected to " . $con->end->id . "\n";
+                echo "\tconnected to " . $con->end->id . " with " . $con->getCarSize() . " cars enroute\n";
             }
         }
     }
