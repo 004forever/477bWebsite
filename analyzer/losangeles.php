@@ -161,19 +161,6 @@ $GLOBALS['debug']=true;
     
     
 $engine = new Engine();
-/*
-$car = new Car($node4);
-$car->setPath(array($node2,$node3,$node4));
-$node1->putCar($car);
-$car = new Car($node4);
-$car->setPath(array($node2,$node3,$node4));
-$node1->putCar($car);
-$car = new Car($node4);
-$car->setPath(array($node3,$node4));
-$node2->putCar($car);
-$car = new Car($node4);
-$car->setPath(array($node4));
-$node3->putCar($car);*/
     
     for($i = 0;$i < 67;$i++)
     {
@@ -191,9 +178,12 @@ $node3->putCar($car);*/
         echo 'edge'.$i.' is '.$edge[$i]->id."\n";
     }
 
+//TODO spawn of car here with destination ie $car=new Car($destinationNode)
+//next add it to the node that it starts in ie $startNode->putCar($car)
+
+$engine->autoRoute();
+
 $engine->start();
 
-
 echo 'done';
-
 ?>
