@@ -159,10 +159,6 @@ $GLOBALS['debug']=true;
     $edge[140] = new Edge($node[65], $node[33], 4.63919);
     $edge[141] = new Edge($node[39], $node[66], 1.81005);
     
-    for($i = 0;$i < 71;$i++)
-    {
-        $edge[$i+71] = new Edge($edge[$i].)
-    }
     
 $engine = new Engine();
     
@@ -175,7 +171,7 @@ $engine = new Engine();
         $engine->addEdge($edge[$i]);
     }
 
-    for($i = 0;$i < 71;$i++)
+    for($i = 0;$i < 142;$i++)
     {
         if($i < 67)
             echo 'node'.$i.' is '.$node[$i]->id."\n";

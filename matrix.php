@@ -73,17 +73,17 @@
             $check = mysql_query("SELECT matrix FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
             $row = mysql_fetch_row($check);
             parse_str($row[0], $elements);
-            $size = 10;
+            $size = 66;
             echo("<tr><td width='50px'>Exit</td>");
-            for($i = 0; $i < $size;$i++)
+            for($i = 0; $i <= $size;$i++)
             {
-                echo("<td width='50px'>".($i+1)."</td>");
+                echo("<td width='50px'><center>".($i)."</center></td>");
             }
             echo("</tr>");
-            for($i = 1;$i <= 10;$i++)
+            for($i = 0;$i <= $size;$i++)
             {
-                echo ("<tr><td width = '50px'>".($i+1)."</td>");
-                for($j = 1;$j <= 10;$j++)
+                echo ("<tr><td width = '50px'><center>".($i)."</center></td>");
+                for($j = 0;$j <= $size;$j++)
                 {
                      echo("<td width = '50px'>");
                     if($j != $i)

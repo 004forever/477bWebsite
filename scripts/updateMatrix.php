@@ -4,9 +4,9 @@
     $user = $_SESSION['user_id'];
     $selection = $_SESSION['selection'];
     $name;
-    for($i = 1;$i <= 10;$i++)
+    for($i = 0;$i <= 66;$i++)
     {
-        for($j = 1;$j <= 10;$j++)
+        for($j = 0;$j <= 66;$j++)
         {
             if($i != $j)
             {
