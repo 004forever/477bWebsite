@@ -3,7 +3,7 @@
 class Edge extends Road {
 
     private $start; //start node
-    private $end;
+    public $end;
     private $distance; //distance in miles
     private $cars_per_hour;
 
