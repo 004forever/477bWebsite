@@ -39,6 +39,8 @@ $engine->addEdge($edge1);
 $engine->addEdge($edge2);
 $engine->addEdge($edge3);
 
+$engine->autoRoute();
+
 echo 'node1 is '.$node1->id;
 echo "\n".'edge1 is'.$edge1->id;
 echo "\n".'node2 is '.$node2->id;
