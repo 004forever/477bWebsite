@@ -18,7 +18,7 @@ class Node extends Road {
     }
 
     public function autoRoute(&$engine) {
-        foreach ($this->car as &$car) {
+        foreach ($this->cars as &$car) {
             $engine->resetDiscovered();
             $car->setPath(Router::shortestPath($car, $this));
         }

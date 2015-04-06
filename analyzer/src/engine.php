@@ -35,7 +35,7 @@ $n->discovered=false;
 }
 public function autoRoute(){
 foreach($this->nodes as &$n){
-$n->autoRoute();
+$n->autoRoute($this);
 }
 }
     private function noCarsInSystem() {
