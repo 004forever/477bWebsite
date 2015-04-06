@@ -9,7 +9,9 @@ class Road{
         $this->cars = array();
         $this->id = uniqid();
     }
-    
+public function getCarSize(){
+return count($this->cars);
+}    
     public function putCar(&$car) {
         $this->cars[] = $car;
     }

@@ -1,4 +1,4 @@
-Ï<?php
+<?php
 
 class Router {
 
@@ -7,12 +7,17 @@ class Router {
     }
 
     public static function dfs(&$dest, &$cur) {
+        if ($cur == $dest) {
+            return array($dest);
+        }
         $cur->discovered = true;
         foreach ($cur->connections as &$conn) {
-            $a = dfs($dest, $conn->end);
-            if ($a) {
-                $a[] = $cur;
-                return $a;
+            if ($conn->discovered == false) {
+                $a = Router::dfs($dest, $conn->end);
+                if ($a) {
+                    $a[] = $cur;
+                    return $a;
+                }
             }
         }
         return null;

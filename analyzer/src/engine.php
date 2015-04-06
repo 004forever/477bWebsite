@@ -1,4 +1,4 @@
-<?php
+g<?php
 
 class Engine {
 
@@ -22,22 +22,37 @@ class Engine {
         while (true) {
             echo "tick\n";
             $this->tick();
+            $this->printStatus();
             if ($this->noCarsInSystem()) {
                 break;
             }
         }
     }
-public function resetDiscovered(){
-foreach($this->nodes as &$n){
-$n->discovered=false;
-}
 
-}
-public function autoRoute(){
-foreach($this->nodes as &$n){
-$n->autoRoute();
-}
-}
+    public function printStatus() {
+        foreach ($this->nodes as $n) {
+            $n->printStatus();
+        }
+    }
+
+    public function resetDiscovered() {
+        foreach ($this->nodes as &$n) {
+            $n->discovered = false;
+        }
+    }
+
+    public function autoRoute() {
+        foreach ($this->nodes as &$n) {
+            $n->autoRoute($this);
+        }
+    }
+
+    public function printAllRoutes() {
+        foreach ($this->nodes as $n) {
+            $n->printAllRoutes();
+        }
+    }
+
     private function noCarsInSystem() {
         foreach ($this->nodes as $n) {
             if ($n->hasCars()) {
@@ -62,5 +77,4 @@ $n->autoRoute();
     }
 
 }
-
 ?>
