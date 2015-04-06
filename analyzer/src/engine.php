@@ -27,17 +27,19 @@ class Engine {
             }
         }
     }
-public function resetDiscovered(){
-foreach($this->nodes as &$n){
-$n->discovered=false;
-}
 
-}
-public function autoRoute(){
-foreach($this->nodes as &$n){
-$n->autoRoute($this);
-}
-}
+    public function resetDiscovered() {
+        foreach ($this->nodes as &$n) {
+            $n->discovered = false;
+        }
+    }
+
+    public function autoRoute() {
+        foreach ($this->nodes as &$n) {
+            $n->autoRoute($this);
+        }
+    }
+
     private function noCarsInSystem() {
         foreach ($this->nodes as $n) {
             if ($n->hasCars()) {
