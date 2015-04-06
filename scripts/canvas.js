@@ -423,7 +423,8 @@ function mixColors(c1, c2, percent)
     return r*256*256+g*256+b;
 }
 
-var speedData  = [];
+var speedData;
+var ready = false;
 var calculated = false;
 var started = true;
 var matrix = [];
@@ -585,7 +586,18 @@ function placeRoads()
     a = 0;
     b = 0;
     getMatrix();*/
-    if(!calculated)
+    
+    var scaler = (1-scale)*(1-scale)*(max-min)+min;
+
+    $.ajax({
+                async: false,
+                url: "sample_speed",
+                dataType: "json",
+                success: function(data) {
+                speedData = data;
+                }
+                });
+    /*if(!calculated)
     {
         for(var j = 0;j < paths.length;j++)
         {
@@ -651,7 +663,7 @@ function placeRoads()
 }
 function drawRoads()
 {
-    var scaler = (1-scale)*(1-scale)*(max-min)+min;
+    var scaler = (1-scale)*(1-scale)*(max-min)+min;*/
     for(var j = 0;j < paths.length || j < tempPaths.length;j++)
     {
         var value;
