@@ -27,7 +27,11 @@ class Engine {
             }
         }
     }
-
+public function autoRoute(){
+foreach($this->nodes as &$n){
+$n->autoRoute();
+}
+}
     private function noCarsInSystem() {
         foreach ($this->nodes as $n) {
             if ($n->hasCars()) {

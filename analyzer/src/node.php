@@ -15,7 +15,9 @@ class Node extends Road {
     public function addConn(&$con) {
         $this->connections[] = $con;
     }
+public function autoRoute(){
 
+}
     public function tick() {
         foreach ($this->cars as $car) {
             if ($car->destination == $this) {
