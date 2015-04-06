@@ -27,7 +27,7 @@ $car = new Car($node4);
 //$car->setPath(array($node3,$node4));
 $node2->putCar($car);
 $car = new Car($node4);
-//$car->setPath(array($node4));
+i//$car->setPath(array($node4));
 $node3->putCar($car);
 
 $engine->addNode($node1);
