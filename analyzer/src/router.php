@@ -9,7 +9,7 @@ class Router {
     public static function dfs(&$dest, &$cur) {
         $cur->discovered = true;
         foreach ($cur->connections as &$conn) {
-            $a = dfs($dest, $conn->end);
+            $a = Router::dfs($dest, $conn->end);
             if ($a) {
                 $a[] = $cur;
                 return $a;
