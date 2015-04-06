@@ -1,4 +1,4 @@
-Ï<?php
+<?php
 
 class Router {
 
