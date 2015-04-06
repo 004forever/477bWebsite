@@ -668,7 +668,7 @@ function drawRoads()
     {
         var value;
         var holder1, holder2;
-        var speed = ((speedData[j])*timeScale+(speedData[j+69])*(1-timeScale))/80;
+        var speed = ((speedData[j])*timeScale+(speedData[j+71])*(1-timeScale))/80;
         
         if(speed < 1/2)
         {
