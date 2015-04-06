@@ -31,7 +31,6 @@ class Edge extends Road {
             if ($c->edgeLength <= 0) {
                 $this->end->putCar($c);
                 $keys[] = $k;
-                $c->popNode();
                 Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id.' on the way to '.$c->nextNode()->id);
             }
         }

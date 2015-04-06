@@ -26,7 +26,7 @@ class Node extends Road {
 
     public function printAllRoutes() {
         foreach ($this->cars as $car) {
-            echo 'car from '.$this->id.' to '.$car->destination->id.': ';
+            echo 'car from ' . $this->id . ' to ' . $car->destination->id . ': ';
             foreach ($car->path as $node) {
                 echo $node->id . ',';
             }
@@ -35,20 +35,36 @@ class Node extends Road {
     }
 
     public function tick() {
-        foreach ($this->cars as $car) {
+        //echo 'node '.$this->id.' is ticking';
+        foreach ($this->cars as &$car) {
             if ($car->destination == $this) {
                 Utils::debug_echo('car reached destination at ' . $this->id);
                 continue;
             }
-            foreach ($this->connections as $conn) {
+            $car->popNode();
+            $found = false;
+            foreach ($this->connections as &$conn) {
                 if ($car->nextNode() == $conn->getEnd()) {
                     Utils::debug_echo('car moving to next edge ' . $conn->id);
                     $conn->putCar($car);
+                    $found = true;
                     break;
                 }
             }
+            if (!$found) {
+                echo 'could not find path for car from node ' . $this->id . ' to ' . $car->destination->id.' expecting next node to be '.$car->nextNode()->id."\n";
+                $this->printStatus();
+                die();
+            } 
         }
         $this->cars = array();
+    }
+
+    public function printStatus() {
+        echo 'node ' . $this->id . ' with ' . $this->getCarSize() . ' cars: ' . "\n";
+        foreach ($this->connections as $con) {
+            echo "\tconnection id ".$con->id." to " . $con->end->id . " with " . $con->getCarSize() . " cars enroute\n";
+        }
     }
 
 }
