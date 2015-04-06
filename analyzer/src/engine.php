@@ -22,6 +22,7 @@ class Engine {
         while (true) {
             echo "tick\n";
             $this->tick();
+            //$this->printStatus();
             if ($this->noCarsInSystem()) {
                 break;
             }
