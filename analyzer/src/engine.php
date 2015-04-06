@@ -1,4 +1,4 @@
-<?php
+g<?php
 
 class Engine {
 
@@ -40,6 +40,12 @@ class Engine {
         }
     }
 
+    public function printAllRoutes() {
+        foreach ($this->nodes as $n) {
+            $n->printAllRoutes();
+        }
+    }
+
     private function noCarsInSystem() {
         foreach ($this->nodes as $n) {
             if ($n->hasCars()) {
@@ -64,5 +70,4 @@ class Engine {
     }
 
 }
-
 ?>

@@ -18,16 +18,16 @@ $edge2 = new Edge($node2,$node3,2);
 $edge3 = new Edge($node3,$node4,3);
 
 $car = new Car($node4);
-$car->setPath(array($node2,$node3,$node4));
+//$car->setPath(array($node2,$node3,$node4));
 $node1->putCar($car);
 $car = new Car($node4);
-$car->setPath(array($node2,$node3,$node4));
+//$car->setPath(array($node2,$node3,$node4));
 $node1->putCar($car);
 $car = new Car($node4);
-$car->setPath(array($node3,$node4));
+//$car->setPath(array($node3,$node4));
 $node2->putCar($car);
 $car = new Car($node4);
-$car->setPath(array($node4));
+//$car->setPath(array($node4));
 $node3->putCar($car);
 
 $engine->addNode($node1);
@@ -40,6 +40,7 @@ $engine->addEdge($edge2);
 $engine->addEdge($edge3);
 
 $engine->autoRoute();
+$engine->printAllRoutes();
 
 echo 'node1 is '.$node1->id;
 echo "\n".'edge1 is'.$edge1->id;

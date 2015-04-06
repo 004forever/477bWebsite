@@ -24,6 +24,16 @@ class Node extends Road {
         }
     }
 
+    public function printAllRoutes() {
+        foreach ($this->cars as $car) {
+            echo 'car from '.$this->id.' to '.$car->destination->id.': ';
+            foreach ($car->path as $node) {
+                echo $node->id . ',';
+            }
+            echo "\n";
+        }
+    }
+
     public function tick() {
         foreach ($this->cars as $car) {
             if ($car->destination == $this) {
