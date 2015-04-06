@@ -5,7 +5,8 @@
  */
 class Node extends Road {
 
-    protected $connections;
+    public $connections;
+public $discovered;
 
     public function __construct() {
         parent::__construct();
@@ -15,8 +16,11 @@ class Node extends Road {
     public function addConn(&$con) {
         $this->connections[] = $con;
     }
-public function autoRoute(){
-
+public function autoRoute(&$engine){
+foreach($this->car as &$car){
+$engine->resetDiscovered();
+$car->setPath(Router::shortestPath($car,$this));
+}
 }
     public function tick() {
         foreach ($this->cars as $car) {

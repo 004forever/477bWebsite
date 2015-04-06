@@ -27,6 +27,12 @@ class Engine {
             }
         }
     }
+public function resetDiscovered(){
+foreach($this->nodes as &$n){
+$n->discovered=false;
+}
+
+}
 public function autoRoute(){
 foreach($this->nodes as &$n){
 $n->autoRoute();
