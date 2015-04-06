@@ -1,4 +1,4 @@
-<?php
+g<?php
 
 class Engine {
 
@@ -24,6 +24,15 @@ class Engine {
             $this->tick();
             if ($this->noCarsInSystem()) {
                 break;
+            }
+        }
+    }
+
+    public function printStatus() {
+        foreach ($this->nodes as $n) {
+            echo 'node ' . $n->id . ' with ' . $n->getCarSize() . ' cars: ' . "\n";
+            foreach ($n->connections as $con) {
+                echo "\tconnected to " . $con->end->id . "\n";
             }
         }
     }

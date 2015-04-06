@@ -50,6 +50,7 @@ echo "\n".'node3 is '.$node3->id;
 echo "\n".'edge3 is'.$edge3->id;
 echo "\n".'node4 is '.$node4->id;
 
+$engine->printStatus();
 $engine->start();
 
 
