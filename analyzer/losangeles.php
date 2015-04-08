@@ -3,10 +3,8 @@
 require_once(__DIR__.'/autoload.php');
 
 $GLOBALS['tick_time_s']=1;//1 second per tick
-$GLOBALS['max_speed_mph']=70;//70mph is max speed
+//$GLOBALS['max_speed_mph']=70;//70mph is max speed
 $GLOBALS['debug']=true;
-
-    //phpinfo();
     
     session_start();
     $_SESSION['user_id'] = 0;
@@ -20,6 +18,11 @@ $GLOBALS['debug']=true;
             echo "Can't connect to 477b";
         }
     }
+
+    $check = mysql_query("SELECT max_freeway_speed FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
+    echo "SELECT max_freeway_speed FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'";
+    $row = mysql_fetch_row($check);
+    $GLOBALS['max_speed_mph']=$row[0];
 
     
     $node = array();
