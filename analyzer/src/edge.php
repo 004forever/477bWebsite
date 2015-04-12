@@ -6,6 +6,8 @@ class Edge extends Road {
     public $end;
     private $distance; //distance in miles
     private $cars_per_hour;
+    
+    private $time = 0;
 
     public function __construct(&$s, &$e, $d) {
         parent::__construct();
@@ -13,6 +15,9 @@ class Edge extends Road {
         $this->start->addConn($this);
         $this->end = &$e;
         $this->cars_per_hour = 0;
+        
+        $this->distance = $d;
+        $this->time = 0;
     }
 
     public function &getEnd() {
@@ -26,12 +31,13 @@ class Edge extends Road {
 
     public function tick() {
         $keys = array();
+        $this->time = $this->time+1;
         foreach ($this->cars as $k => &$c) {
             $c->edgeLength -= $this->getSpeed() / 60 * $GLOBALS['tick_time_s'];
             if ($c->edgeLength <= 0) {
                 $this->end->putCar($c);
                 $keys[] = $k;
-                Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id.' on the way to '.$c->nextNode()->id);
+                Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id.' on the way to '.$c->nextNode()->id.' at time '.$this->time);
             }
         }
         $this->cars = Utils::arr_rm($this->cars, $keys);
@@ -44,7 +50,6 @@ class Edge extends Road {
         $speed = (count($this->cars) / distance / $this->cars_per_hour);
         return $speed > $GLOBALS['max_speed_mph'] ? $GLOBALS['max_speed_mph'] : $speed;
     }
-
 }
 
 ?>

@@ -225,9 +225,4 @@ $engine->autoRoute();
 $engine->start();
 
 echo 'done';
-    
-    for($i = 0;$i < 142;$i++)
-    {
-        echo $edge[$i]->getSpeed();
-    }
 ?>
