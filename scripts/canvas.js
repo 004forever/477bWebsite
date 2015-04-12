@@ -594,7 +594,7 @@ function placeRoads()
 
     $.ajax({
                 async: false,
-                url: "sample_speed",
+                url: "output.txt",
                 dataType: "json",
                 success: function(data) {
                 speedData = data;
@@ -667,6 +667,7 @@ function placeRoads()
 function drawRoads()
 {
     var scaler = (1-scale)*(1-scale)*(max-min)+min;*/
+    timePoints = speedData.length/71;
     var upper = Math.ceil(timeScale*timePoints);
     var lower = Math.floor(timeScale*timePoints);
     var middle = (timeScale-lower/timePoints)*timePoints;
