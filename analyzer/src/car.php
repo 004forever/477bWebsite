@@ -4,6 +4,8 @@ class Car {
 
     public $destination;
     public $path;
+    
+    public $edgeLength;
 
     public function __construct(&$destination) {
         $this->destination = $destination;

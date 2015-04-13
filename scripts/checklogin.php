@@ -12,7 +12,7 @@ else{
 		echo "Can't connect to 477b";
 	}
 }
-    $check = mysql_query("SELECT id FROM users WHERE token='".$username.$password."'");
+    $check = mysql_query("SELECT id FROM users WHERE token='".md5($username.$password)."'");
 if( mysql_num_rows($check)== 1)
     {
         $check = mysql_fetch_row($check);

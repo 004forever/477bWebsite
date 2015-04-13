@@ -34,7 +34,7 @@ var timeH = dim/2;
 var centerTimeX = timeX+timeW*timeScale;
 var centerTimeY = timeY +timeH/2;
 
-var exitSize = 7;
+var exitSize = 5;
 
     var exits = [];
     var paths = [];
@@ -578,6 +578,9 @@ function callback(response, status) {
     }
 }
 
+var timePoints = 1;
+
+var lastScale = -1;
 
 function placeRoads()
 {
@@ -591,7 +594,7 @@ function placeRoads()
 
     $.ajax({
                 async: false,
-                url: "sample_speed",
+                url: "output.txt",
                 dataType: "json",
                 success: function(data) {
                 speedData = data;
@@ -664,11 +667,21 @@ function placeRoads()
 function drawRoads()
 {
     var scaler = (1-scale)*(1-scale)*(max-min)+min;*/
+    timePoints = speedData.length/71;
+    var upper = Math.ceil(timeScale*timePoints);
+    var lower = Math.floor(timeScale*timePoints);
+    var middle = (timeScale-lower/timePoints)*timePoints;
+    if(lastScale != timeScale)
+    {
+        lastScale = timeScale;
+        //alert(timeScale+" "+upper+" "+lower+" "+middle);
+    }
     for(var j = 0;j < paths.length || j < tempPaths.length;j++)
     {
         var value;
         var holder1, holder2;
-        var speed = ((speedData[j])*timeScale+(speedData[j+71])*(1-timeScale))/80;
+        var speed = ((speedData[j+71*lower])*(1-middle)+(speedData[j+71*upper])*middle)/80;
+        //var speed = ((speedData[j])*timeScale+(speedData[j+71])*(1-timeScale))/80;
         
         if(speed < 1/2)
         {
@@ -694,7 +707,7 @@ function drawRoads()
                 pY = tempExits[tempPaths[j].a].y*scaler+y;
             }
         }
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 5*scaler;
         ctx.beginPath();
         ctx.moveTo(pX,pY);
         if(!editMode)
@@ -730,7 +743,7 @@ function drawRoads()
                     ctx.fillStyle = "#000000";
                     if(i == checkinger)
                         ctx.fillStyle = "#FF0000";
-                    ctx.arc(pX, pY, exitSize, 0, 2 * Math.PI, false);
+                    ctx.arc(pX, pY, exitSize*scaler, 0, 2 * Math.PI, false);
                     ctx.fill();
                 }
             }
@@ -745,7 +758,7 @@ function drawRoads()
                 {
                     ctx.beginPath();
                     ctx.fillStyle = "#000000";
-                    ctx.arc(pX, pY, exitSize, 0, 2 * Math.PI, false);
+                    ctx.arc(pX, pY, exitSize*scaler, 0, 2 * Math.PI, false);
                     ctx.fill();
                 }
             }

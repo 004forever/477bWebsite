@@ -4,7 +4,6 @@
                         header("location: login.php");
     if(!isset($_SESSION['selection']))
         $_SESSION['selection'] = 'Weekend';
-    echo("".$_SESSION['selection']);
     $con=mysql_connect("localhost","four","password");
     if (!$con) {
         die('Could not connect to MySQL: ' . mysql_error());
@@ -96,12 +95,12 @@
     ?>
 </div>
 <form action = "scripts/addRun.php" method = "post" name = "adder" id="adder">
-<input type = text style="width:300px;height:30px;background-color:black;color:white;font-size:75%" name = "name">
+<input type = text style="width:290px;height:30px;background-color:black;color:white;font-size:75%" name = "name">
 <div id = "add">
 ADD
 </div>
 </form>
-    <form action = "scripts/runSimulation.php" method = "post" name = "adjust">
+    <form action = "analyzer/losangeles.php" method = "post" name = "adjust">
     <table id ="times">
     <tr>
     <td>Start Time</td>

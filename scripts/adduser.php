@@ -26,7 +26,7 @@ if($pass1 != $pass2)
 }
 if($error == "")
 {
-    mysql_query("INSERT into users (token) VALUES ('".$username.$pass1."')");
+    mysql_query("INSERT into users (token) VALUES ('".md5($username.$pass1)."')");
 }
 $result = mysql_query("SELECT * FROM users ")or die(mysql_error());
 if (!$result) {
@@ -39,7 +39,7 @@ if (!$result) {
     }
     else
     {
-        $check = mysql_query("SELECT id FROM users WHERE token='".$username.$pass1."'");
+        $check = mysql_query("SELECT id FROM users WHERE token='".md5($username.$pass1)."'");
         mysql_close();
         if( mysql_num_rows($check)== 1)
         {

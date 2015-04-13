@@ -59,9 +59,11 @@ text-align:center;
 #adder
 {
 width:300px;
-height:70px;
+height:85px;
 float:left;
 margin:10px;
+top-margin:0px;
+bottom-margin:0px;
 overflow : auto; 
 font-size:200%;
 text-align:center;
