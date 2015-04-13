@@ -53,7 +53,7 @@ echo "\n".'node4 is '.$node4->id;
 
 $engine->printStatus();
 $engine->start();
-
+$engine->getJsonResults();
 
 echo 'done';
 

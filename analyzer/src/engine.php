@@ -1,17 +1,19 @@
 <?php
 
-Utils::load_defaults();//sets globals if not set manually
+Utils::load_defaults(); //sets globals if not set manually
 
 class Engine {
 
     private $edges;
     private $nodes;
     private $time;
+    private $speed_info;
 
     public function __construct() {
         $this->edges = array();
         $this->nodes = array();
-        $time = 0;
+        $this->speed_info = array();
+        $this->time = 0;
     }
 
     public function addEdge($e) {
@@ -78,7 +80,24 @@ class Engine {
         foreach ($this->nodes as $n) {
             $n->tick($this->time);
         }
+        $this->speed_info[] = $this->gatherSpeedInfo();
         $this->time++;
+    }
+
+    public function getJsonResults() {
+        return json_encode($this->getResults());
+    }
+
+    public function getResults() {
+        return $this->speed_info;
+    }
+
+    private function gatherSpeedInfo() {
+        $result = array();
+        foreach ($this->edges as $e) {
+            $result[] = $e->getSpeed();
+        }
+        return $result;
     }
 
 }
