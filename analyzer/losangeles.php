@@ -231,6 +231,7 @@ $engine->start();
     $maxSize = 0;
     $finalSize = array();
 //echo 'done';
+    /*
     for($i = 0;$i < 71;$i++)
     {
         $tempSpeed1 = $edge[$i]->returnSpeeds();
@@ -283,6 +284,8 @@ $engine->start();
     fwrite($fh, $output);
     fclose($fh);
     echo "<script>  window.location.href = '../index.php';</script>";
+     *
+     */
     //header("location: ../index.php");
     
     //$engine->getJsonResults();//THIS CONTAINS THE JSON OBJECT, I think you can hack it and just do
