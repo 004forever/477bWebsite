@@ -5,6 +5,7 @@ require_once(__DIR__.'/autoload.php');
 $GLOBALS['tick_time_s']=1;//1 second per tick
 $GLOBALS['max_speed_mph']=70;//70mph is max speed
 $GLOBALS['debug']=true;
+$GLOBALS['minutes_per_hour']=60;
 
 $engine = new Engine();
 
@@ -52,7 +53,7 @@ echo "\n".'node4 is '.$node4->id;
 
 $engine->printStatus();
 $engine->start();
-
+$engine->getJsonResults();
 
 echo 'done';
 

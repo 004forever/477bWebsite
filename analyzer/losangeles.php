@@ -205,6 +205,8 @@ $engine = new Engine();
     parse_str($row[0], $elements);
     ini_restore('max_input_vars');
     $size = 66;
+//var_dump($elements);
+//die();
     for($i = 0;$i <= $size;$i++)
     {
         for($j = 0;$j <= $size;$j++)
@@ -229,6 +231,7 @@ $engine->start();
     $maxSize = 0;
     $finalSize = array();
 //echo 'done';
+    /*
     for($i = 0;$i < 71;$i++)
     {
         $tempSpeed1 = $edge[$i]->returnSpeeds();
@@ -280,6 +283,12 @@ $engine->start();
     $output = ']';
     fwrite($fh, $output);
     fclose($fh);
-    //echo "<script>  window.location.href = '../index.php';</script>";
+
     //header("location: ../index.php");
+    
+    //$engine->getJsonResults();//THIS CONTAINS THE JSON OBJECT, I think you can hack it and just do
+    /*
+     * <script>var simResult = <?=$engine->getJsonResults();?>;//global variable with json results sent to front end</script>
+     * 
+     */
 ?>
