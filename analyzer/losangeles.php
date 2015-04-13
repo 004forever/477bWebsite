@@ -280,6 +280,6 @@ $engine->start();
     $output = ']';
     fwrite($fh, $output);
     fclose($fh);
-    echo "<script>  window.location.href = '../index.php';</script>";
+    //echo "<script>  window.location.href = '../index.php';</script>";
     //header("location: ../index.php");
 ?>

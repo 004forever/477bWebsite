@@ -4,7 +4,7 @@ class Edge extends Road {
 
     private $start; //start node
     public $end;
-    private $distance; //distance in miles
+    public $distance; //distance in miles
     private $cars_per_hour;
     
     private $running_per_hour;

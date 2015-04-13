@@ -79,7 +79,7 @@ function findLatLong(x, y)
     return {lat:lat, long:long};
 }
 
-var checkinger = -1;
+var checkinger = 54;
 
 exits[0] = {x:-282.828403512773,y:-53.8284186398814,exit:true};//{x:-284,y:-52,exit:true};
 exits[1] = {x:-235.038515138731,y:-57.8863330829918,exit:true};//{x:-237,y:-59,exit:true};
@@ -742,7 +742,7 @@ function drawRoads()
                     ctx.beginPath();
                     ctx.fillStyle = "#000000";
                     if(i == checkinger)
-                        ctx.fillStyle = "#FF0000";
+                        ctx.fillStyle = "#FFFFFF";
                     ctx.arc(pX, pY, exitSize*scaler, 0, 2 * Math.PI, false);
                     ctx.fill();
                 }
