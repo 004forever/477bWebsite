@@ -6,6 +6,7 @@ $GLOBALS['tick_time_s']=1;//1 second per tick
 //$GLOBALS['max_speed_mph']=70;//70mph is max speed
 $GLOBALS['debug']=true;
     
+    $GLOBALS['minutes_per_hour']=60;
     session_start();
     $_SESSION['user_id'] = 0;
     $con=mysql_connect("localhost","four","password");
@@ -216,7 +217,7 @@ $engine = new Engine();
                 for($k = 0;$k < $elements["".$i."-".$j];$k++)
                 {
                     $car = new Car($node[$j]);
-                    $node[$i]->putCar($car);
+                    $node[$i]->putCar($car, 0);
                 }
             }
         }
@@ -230,7 +231,9 @@ $engine->start();
     $tempSpeed2;
     $maxSize = 0;
     $finalSize = array();
-//echo 'done';
+    $_SESSION['results'] = $engine->getJsonResults();
+   // echo  $_SESSION['results'];
+    //echo 'done';
     /*
     for($i = 0;$i < 71;$i++)
     {

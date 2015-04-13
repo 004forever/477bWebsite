@@ -18,10 +18,14 @@
     }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <script src = "https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+<script>
+var simResults = <?php echo $_SESSION['results'];?>;
+</script>
 <title>TraffX - Map</title>
 <meta charset="utf-8">
 <link href = style.css rel = "stylesheet">

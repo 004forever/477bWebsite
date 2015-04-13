@@ -667,7 +667,8 @@ function placeRoads()
 function drawRoads()
 {
     var scaler = (1-scale)*(1-scale)*(max-min)+min;*/
-    timePoints = speedData.length/71;
+    timePoints = simResults.length-1;
+    //alert(simResults);
     var upper = Math.ceil(timeScale*timePoints);
     var lower = Math.floor(timeScale*timePoints);
     var middle = (timeScale-lower/timePoints)*timePoints;
@@ -680,8 +681,8 @@ function drawRoads()
     {
         var value;
         var holder1, holder2;
-        var speed = ((speedData[j+71*lower])*(1-middle)+(speedData[j+71*upper])*middle)/80;
-        //var speed = ((speedData[j])*timeScale+(speedData[j+71])*(1-timeScale))/80;
+        var speed = ((simResults[lower][j])*(1-middle)+(simResults[upper][j])*middle)/80;//((speedData[j+71*lower])*(1-middle)+(speedData[j+71*upper])*middle)/80;
+        
         
         if(speed < 1/2)
         {
