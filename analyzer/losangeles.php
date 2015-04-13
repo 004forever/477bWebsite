@@ -284,4 +284,10 @@ $engine->start();
     fclose($fh);
     echo "<script>  window.location.href = '../index.php';</script>";
     //header("location: ../index.php");
+    
+    //$engine->getJsonResults();//THIS CONTAINS THE JSON OBJECT, I think you can hack it and just do
+    /*
+     * <script>var simResult = <?=$engine->getJsonResults();?>;//global variable with json results sent to front end</script>
+     * 
+     */
 ?>

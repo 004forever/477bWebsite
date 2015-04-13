@@ -1,7 +1,7 @@
 <?php
 
 class Router {
-
+    
     public static function shortestPath(&$car, &$start) {
         return array_reverse(Router::dfs($car->destination, $start));
     }
