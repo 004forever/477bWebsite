@@ -22,7 +22,7 @@ class Road {
         return !empty($this->cars);
     }
 
-    private function getCarsPerHour() {
+    protected function getCarsPerHour() {
         $sum = 0;
         foreach ($cars as $c) {
             $sum += $c;
