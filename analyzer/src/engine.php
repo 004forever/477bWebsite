@@ -1,13 +1,17 @@
-g<?php
+<?php
+
+Utils::load_defaults();//sets globals if not set manually
 
 class Engine {
 
     private $edges;
     private $nodes;
+    private $time;
 
     public function __construct() {
         $this->edges = array();
         $this->nodes = array();
+        $time = 0;
     }
 
     public function addEdge($e) {
@@ -69,12 +73,14 @@ class Engine {
 
     public function tick() {
         foreach ($this->edges as $e) {
-            $e->tick();
+            $e->tick($this->time);
         }
         foreach ($this->nodes as $n) {
-            $n->tick();
+            $n->tick($this->time);
         }
+        $this->time++;
     }
 
 }
+
 ?>
