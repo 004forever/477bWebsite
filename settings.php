@@ -4,8 +4,8 @@
      header("location: login.php");
      if(!isset($_SESSION['selection']))
      $_SESSION['selection'] = 'Weekend';*/
-    $_SESSION['user_id'] = 5;
-    $_SESSION['selection'] = 'test';
+    $_SESSION['user_id'] = 0;
+    $_SESSION['selection'] = 'Weekend';
     $con=mysql_connect("localhost","four","password");
     if (!$con) {
         die('Could not connect to MySQL: ' . mysql_error());
