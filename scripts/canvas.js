@@ -79,7 +79,7 @@ function findLatLong(x, y)
     return {lat:lat, long:long};
 }
 
-var checkinger = 54;
+var checkinger = 40;
 
 exits[0] = {x:-282.828403512773,y:-53.8284186398814,exit:true};//{x:-284,y:-52,exit:true};
 exits[1] = {x:-235.038515138731,y:-57.8863330829918,exit:true};//{x:-237,y:-59,exit:true};
@@ -581,6 +581,7 @@ function callback(response, status) {
 var timePoints = 1;
 
 var lastScale = -1;
+var first = true;
 
 function placeRoads()
 {
@@ -681,9 +682,9 @@ function drawRoads()
     {
         var value;
         var holder1, holder2;
-        var speed = ((simResults[lower][j])*(1-middle)+(simResults[upper][j])*middle)/80;//((speedData[j+71*lower])*(1-middle)+(speedData[j+71*upper])*middle)/80;
-        
-        
+        var lowPart = simResults[lower][j]/2 + simResults[lower][j+71]/2;
+        var highPart = simResults[upper][j]/2 + simResults[upper][j+71]/2;
+        var speed = (lowPart*(1-middle)+highPart*middle)/80;
         if(speed < 1/2)
         {
             ctx.strokeStyle = mixColors(16711680, 16776960, (1-speed*2)).toString(16);

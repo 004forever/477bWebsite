@@ -6,6 +6,7 @@ class Router {
         
         session_start();
         $_SESSION['user_id'] = 0;
+        $_SESSION['selection'] = 'Weekend';
         $con=mysql_connect("localhost","four","password");
         if (!$con) {
             die('Could not connect to MySQL: ' . mysql_error());
@@ -92,13 +93,21 @@ class Router {
     public static function optimal(&$dest, &$cur)
     {
         $list = Router::allDfs($dest, $cur);
-        $entry = $list[0];
-        echo "****";
+        $min = -1;
+        $minDist = 0;
+        $dist;
+        $entry;
         for($i = 0;$i < count($list);$i++)
         {
-            echo Router::getLength(array_reverse($list[$i]))." ";
+            $dist = Router::getLength(array_reverse($list[$i]));
+            if($dist < $minDist || $minDist ==0)
+            {
+                $min = $i;
+                $minDist = $dist;
+            }
         }
-        echo "****";
+        $rand = rand(0, count($list));
+        $entry = $list[$rand];//$min
         $list = null;
         return $entry;
     }
