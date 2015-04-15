@@ -23,7 +23,7 @@ class Router {
         $algorithm=$row[0];
         if($algorithm == 1)
             return array_reverse(Router::dfs($car->destination, $start));
-        return array_reverse(Router::dfs($car->destination, $start));
+        return array_reverse(Router::optimal($car->destination, $start));
     }
 
     public static function dfs(&$dest, &$cur) {
@@ -107,7 +107,7 @@ class Router {
             }
         }
         $rand = rand(0, count($list));
-        $entry = $list[$rand];//$min
+        $entry = $list[$min];//$min
         $list = null;
         return $entry;
     }

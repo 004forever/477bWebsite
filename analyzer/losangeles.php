@@ -2,7 +2,7 @@
 
 require_once(__DIR__.'/autoload.php');
 
-$GLOBALS['tick_time_s']=1;//1 second per tick
+$GLOBALS['tick_time_s']=60;//1 second per tick
 //$GLOBALS['max_speed_mph']=70;//70mph is max speed
 $GLOBALS['debug']=true;
     
