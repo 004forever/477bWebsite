@@ -106,7 +106,7 @@ class Router {
                 $minDist = $dist;
             }
         }
-        $rand = rand(0, count($list));
+        $rand = rand(0, count($list)-1);
         $entry = $list[$min];//$min
         $list = null;
         return $entry;

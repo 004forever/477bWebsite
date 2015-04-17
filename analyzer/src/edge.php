@@ -23,7 +23,7 @@ class Edge extends Road {
         return $this->end;
     }
 
-    public function putCar(&$car,$time) {
+    public function putCar(&$car){//,$time) {
         $car->edgeLength = $this->distance;
         parent::putCar($car);
         $this->running_per_hour++;
@@ -47,6 +47,8 @@ class Edge extends Road {
         if ($cph == 0) {
             return $GLOBALS['max_speed_mph'];
         }
+        //the first equation is correct, but I'm leaving the second one because it's easier to see cars on the road
+        //$speed = $GLOBALS['max_speed_mph']*(1-count($this->cars)/(1056*$this->distance));
         $speed = (count($this->cars) / $this->distance / $cph);
         return $speed > $GLOBALS['max_speed_mph'] ? $GLOBALS['max_speed_mph'] : $speed;
     }
