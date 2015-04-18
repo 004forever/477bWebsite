@@ -113,7 +113,7 @@ class Router {
         {
             if($minDist *1.2 >= $distances[$i])
             {
-                echo "~".$minDist."-".$distances[$i];
+                //echo "~".$minDist."-".$distances[$i];
                 $numValid++;
                 $valid[$i] = true;
             }
@@ -122,7 +122,7 @@ class Router {
                 $valid[$i] = false;
             }
         }
-        echo "***".$numValid;
+        //echo "***".$numValid;
         $rand = rand(0, $numValid-1);
         $i = -1;
         while($rand >= 0)
