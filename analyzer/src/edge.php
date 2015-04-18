@@ -5,8 +5,6 @@ class Edge extends Road {
     private $start; //start node
     public $end;
     public $distance; //distance in miles
-    private $cars_per_hour;
-    
     private $running_per_hour;
 
     public function __construct(&$s, &$e, $d) {
@@ -23,34 +21,57 @@ class Edge extends Road {
         return $this->end;
     }
 
-    public function putCar(&$car){//,$time) {
+    public function getCarSize() {
+        $sum = 0;
+        foreach ($this->cars as $car) {
+            $sum += count($car);
+        }
+        return $sum;
+    }
+
+    protected function getCarsPerHour() {
+        $sum = 0;
+        foreach ($this->cars as $c) {
+            $sum += $c;
+        }
+        return $sum;
+    }
+
+    public function putCar(&$car, $time) {
         $car->edgeLength = $this->distance;
-        parent::putCar($car);
+        $this->cars[$time % $GLOBALS['minutes_per_hour']][] = $car; //here's your problem
         $this->running_per_hour++;
     }
 
     public function tick($time) {
+        $this->cars[$time % $GLOBALS['minutes_per_hour']] = array();
         $keys = array();
-        foreach ($this->cars as $k => &$c) {
-            $c->edgeLength -= $this->getSpeed() / 60 * $GLOBALS['tick_time_s'];
-            if ($c->edgeLength <= 0) {
-                $this->end->putCar($c);
-                $keys[] = $k;
-                Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id . ' on the way to ' . $c->nextNode()->id . ' at time ' . $time);
+        foreach ($this->cars as $key => $car) {
+            foreach ($car as $k => &$c) {
+                $c->edgeLength -= $this->getSpeed() / 60 * $GLOBALS['tick_time_s'];
+                if ($c->edgeLength <= 0) {
+                    $this->end->putCar($c);
+                    $keys[] = $k;
+                    Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id . ' on the way to ' . $c->nextNode()->id . ' at time ' . $time);
+                }
             }
+            $this->cars = Utils::arr_rm($this->cars[$key], $keys);
         }
-        $this->cars = Utils::arr_rm($this->cars, $keys);
     }
 
+    /*
+     * Flow (V) = Number of vehicles passing a certain point during a given time period, in vehicles per hour (veh / hr)
+     * Speed (S) = The rate at which vehicles travel (mph)
+     * Density (D) = Number of vehicles occupying a certain space. Given as veh / mi.
+     * Density = Flow/Speed
+     * Therefore Speed = Flow/Density
+     */
+
     public function getSpeed() {
-        $cph = $this->getCarsPerHour();
-        if ($cph == 0) {
-            return $GLOBALS['max_speed_mph'];
-        }
-        //the first equation is correct, but I'm leaving the second one because it's easier to see cars on the road
-        //$speed = $GLOBALS['max_speed_mph']*(1-count($this->cars)/(1056*$this->distance));
-        $speed = (count($this->cars) / $this->distance / $cph);
-        return $speed > $GLOBALS['max_speed_mph'] ? $GLOBALS['max_speed_mph'] : $speed;
+        $v = $this->getCarsPerHour();
+        $d = $this->getCarSize() / $this->distance;
+        $s = $v / $d;
+        return $s > $GLOBALS['max_speed_mph'] ? $GLOBALS['max_speed_mph'] : $s;
     }
 
 }

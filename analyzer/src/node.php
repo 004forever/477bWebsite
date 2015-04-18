@@ -34,7 +34,7 @@ class Node extends Road {
         }
     }
 
-    public function tick() {
+    public function tick($time) {
         //echo 'node '.$this->id.' is ticking';
         foreach ($this->cars as &$car) {
             if ($car->destination == $this) {
@@ -46,7 +46,7 @@ class Node extends Road {
             foreach ($this->connections as &$conn) {
                 if ($car->nextNode() == $conn->getEnd()) {
                     Utils::debug_echo('car moving to next edge ' . $conn->id);
-                    $conn->putCar($car);
+                    $conn->putCar($car,$time);
                     $found = true;
                     break;
                 }
