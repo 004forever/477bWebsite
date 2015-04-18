@@ -232,7 +232,7 @@ $engine->start();
     $maxSize = 0;
     $finalSize = array();
     $_SESSION['results'] = $engine->getJsonResults();
-    //echo "<script> window.location.href = '../index.php';</script>";
+    echo "<script> window.location.href = '../index.php';</script>";
    // echo  $_SESSION['results'];
     //echo 'done';
     /*
