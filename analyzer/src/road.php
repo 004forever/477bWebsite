@@ -14,22 +14,14 @@ class Road {
         return count($this->cars);
     }
 
-    public function putCar(&$car){//, $time) {
+    public function putCar(&$car) {
         $this->cars[] = $car;
-        //$this->cars[$time % $GLOBALS['minutes_per_hour']] = $car;//here's your problem
     }
 
     public function hasCars() {
         return !empty($this->cars);
     }
 
-    protected function getCarsPerHour() {
-        $sum = 0;
-        foreach ($this->cars as $c) {
-            $sum += $c;
-        }
-        return $sum;
-    }
 
 }
 
