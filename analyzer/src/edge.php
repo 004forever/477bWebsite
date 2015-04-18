@@ -5,15 +5,15 @@ class Edge extends Road {
     private $start; //start node
     public $end;
     public $distance; //distance in miles
-    private $running_per_hour;
+    private $car_history;
 
     public function __construct(&$s, &$e, $d) {
         parent::__construct();
         $this->start = &$s;
         $this->start->addConn($this);
         $this->end = &$e;
+        $this->car_history = array();
 
-        $this->running_per_hour = 0;
         $this->distance = $d;
     }
 
@@ -21,17 +21,9 @@ class Edge extends Road {
         return $this->end;
     }
 
-    public function getCarSize() {
-        $sum = 0;
-        foreach ($this->cars as $car) {
-            $sum += count($car);
-        }
-        return $sum;
-    }
-
     protected function getCarsPerHour() {
         $sum = 0;
-        foreach ($this->cars as $c) {
+        foreach ($this->car_history as $c) {
             $sum += $c;
         }
         return $sum;
@@ -39,24 +31,22 @@ class Edge extends Road {
 
     public function putCar(&$car, $time) {
         $car->edgeLength = $this->distance;
-        $this->cars[$time % $GLOBALS['minutes_per_hour']][] = $car; //here's your problem
-        $this->running_per_hour++;
+        $this->car_history[$time % $GLOBALS['minutes_per_hour']][] = $car; //here's your problem
+        parent::putCar($car);
     }
 
     public function tick($time) {
-        $this->cars[$time % $GLOBALS['minutes_per_hour']] = array();
+        $this->car_history[$time % $GLOBALS['minutes_per_hour']] = array();
         $keys = array();
-        foreach ($this->cars as $key => $car) {
-            foreach ($car as $k => &$c) {
-                $c->edgeLength -= $this->getSpeed() / 60 * $GLOBALS['tick_time_s'];
-                if ($c->edgeLength <= 0) {
-                    $this->end->putCar($c);
-                    $keys[] = $k;
-                    Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id . ' on the way to ' . $c->nextNode()->id . ' at time ' . $time);
-                }
+        foreach ($this->cars as $k => $c) {
+            $c->edgeLength -= $this->getSpeed() / 60 * $GLOBALS['tick_time_s'];
+            if ($c->edgeLength <= 0) {
+                $this->end->putCar($c);
+                $keys[] = $k;
+                Utils::debug_echo('car reached end of edge and will move to ' . $this->end->id . ' on the way to ' . $c->nextNode()->id . ' at time ' . $time);
             }
-            $this->cars = Utils::arr_rm($this->cars[$key], $keys);
         }
+        $this->cars = Utils::arr_rm($this->cars, $keys);
     }
 
     /*
