@@ -23,8 +23,10 @@ class Edge extends Road {
 
     protected function getCarsPerHour() {
         $sum = 0;
-        foreach ($this->car_history as $c) {
-            $sum += $c;
+        foreach ($this->car_history as $v) {
+            foreach($v as $c) {
+                $sum += count($c);
+            }
         }
         return $sum;
     }
