@@ -21,9 +21,9 @@ else{
     if (strlen($speed) == 0 || $speed < 10){
         $speed = 10;
             }
-    if($speed > 70)
+    if($speed > 80)
     {
-        $speed = 70;
+        $speed = 80;
     }
     if (strlen($truck) == 0){
         $truck = 0;

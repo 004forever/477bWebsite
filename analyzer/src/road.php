@@ -14,8 +14,9 @@ class Road {
         return count($this->cars);
     }
 
-    public function putCar(&$car, $time) {
-        $this->cars[$time % $GLOBALS['minutes_per_hour']] = $car;
+    public function putCar(&$car){//, $time) {
+        $this->cars[] = $car;
+        //$this->cars[$time % $GLOBALS['minutes_per_hour']] = $car;//here's your problem
     }
 
     public function hasCars() {
@@ -24,7 +25,7 @@ class Road {
 
     protected function getCarsPerHour() {
         $sum = 0;
-        foreach ($cars as $c) {
+        foreach ($this->cars as $c) {
             $sum += $c;
         }
         return $sum;

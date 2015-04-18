@@ -581,6 +581,7 @@ function callback(response, status) {
 var timePoints = 1;
 
 var lastScale = -1;
+var first = true;
 
 function placeRoads()
 {
@@ -667,7 +668,8 @@ function placeRoads()
 function drawRoads()
 {
     var scaler = (1-scale)*(1-scale)*(max-min)+min;*/
-    timePoints = speedData.length/71;
+    timePoints = simResults.length-1;
+    //alert(simResults);
     var upper = Math.ceil(timeScale*timePoints);
     var lower = Math.floor(timeScale*timePoints);
     var middle = (timeScale-lower/timePoints)*timePoints;
@@ -680,9 +682,10 @@ function drawRoads()
     {
         var value;
         var holder1, holder2;
-        var speed = ((speedData[j+71*lower])*(1-middle)+(speedData[j+71*upper])*middle)/80;
-        //var speed = ((speedData[j])*timeScale+(speedData[j+71])*(1-timeScale))/80;
-        
+        var lowPart = simResults[lower][j]/2 + simResults[lower][j+71]/2;
+        var highPart = simResults[upper][j]/2 + simResults[upper][j+71]/2;
+        var speed = (lowPart*(1-middle)+highPart*middle)/80;
+        speed = speed*speed;
         if(speed < 1/2)
         {
             ctx.strokeStyle = mixColors(16711680, 16776960, (1-speed*2)).toString(16);
@@ -742,7 +745,7 @@ function drawRoads()
                     ctx.beginPath();
                     ctx.fillStyle = "#000000";
                     if(i == checkinger)
-                        ctx.fillStyle = "#FF0000";
+                        ctx.fillStyle = "#FFFFFF";
                     ctx.arc(pX, pY, exitSize*scaler, 0, 2 * Math.PI, false);
                     ctx.fill();
                 }
