@@ -17,8 +17,10 @@
         }
         protected function getCarsPerHour() {
             $sum = 0;
-            foreach ($this->car_history as $c) {
-                $sum += $c;
+            foreach ($this->car_history as $v) {
+                foreach($v as $c) {
+                    $sum += count($c);
+                }
             }
             return $sum;
         }
@@ -47,8 +49,6 @@
          * Density = Flow/Speed
          * Therefore Speed = Flow/Density
          */
-        
-                //$speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(1056*$this->distance));
         public function getSpeed() {
             $v = $this->getCarsPerHour();
             $d = $this->getCarSize() / $this->distance;
@@ -57,3 +57,6 @@
         }
     }
     ?>
+
+//$speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(1056*$this->distance));
+
