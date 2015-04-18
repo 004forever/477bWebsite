@@ -93,21 +93,47 @@ class Router {
     public static function optimal(&$dest, &$cur)
     {
         $list = Router::allDfs($dest, $cur);
+        $distances = array();
+        $valid = array();
+        $numValid;
         $min = -1;
         $minDist = 0;
-        $dist;
         $entry;
         for($i = 0;$i < count($list);$i++)
         {
-            $dist = Router::getLength(array_reverse($list[$i]));
-            if($dist < $minDist || $minDist ==0)
+            $distances[$i] = Router::getLength(array_reverse($list[$i]));
+            if($distances[$i] < $minDist || $minDist ==0)
             {
                 $min = $i;
-                $minDist = $dist;
+                $minDist = $distances[$i];
             }
         }
-        $rand = rand(0, count($list)-1);
-        $entry = $list[$min];//$min
+        $numValid = 0;
+        for($i = 0;$i < count($distances);$i++)
+        {
+            if($minDist *1.2 >= $distances[$i])
+            {
+                echo "~".$minDist."-".$distances[$i];
+                $numValid++;
+                $valid[$i] = true;
+            }
+            else
+            {
+                $valid[$i] = false;
+            }
+        }
+        echo "***".$numValid;
+        $rand = rand(0, $numValid-1);
+        $i = -1;
+        while($rand >= 0)
+        {
+            $i++;
+            if($valid[$i])
+            {
+                $rand--;
+            }
+        }
+        $entry = $list[$i];//$min
         $list = null;
         return $entry;
     }

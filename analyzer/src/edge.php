@@ -39,7 +39,7 @@ class Edge extends Road {
 
     public function putCar(&$car, $time) {
         $car->edgeLength = $this->distance;
-        $this->cars[$time % $GLOBALS['minutes_per_hour']][] = $car; //here's your problem
+        $this->cars[$time % $GLOBALS['minutes_per_hour']][] = $car;
         $this->running_per_hour++;
     }
 
@@ -65,11 +65,21 @@ class Edge extends Road {
      * Density (D) = Number of vehicles occupying a certain space. Given as veh / mi.
      * Density = Flow/Speed
      * Therefore Speed = Flow/Density
+     
+     *The problem with this equation is that it assumes we know the actual flow for the road in the real world, but we're calculating it based on how many cars we happen to send down the road.  So if 1 car is sent down, the flow is calculated to be 1 car per hour.  If we send a billion cars down the road, it's calculated to be 1 billion cars per hour.  
      */
 
     public function getSpeed() {
+        //putting this back to avoid divide by zero issues for now
+        if($this->getCarSize() == 0)
+            $speed = 70;
+        else
+            $speed = 10;
+        //$speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(1056*$this->distance));
+        return $speed;
         $v = $this->getCarsPerHour();
         $d = $this->getCarSize() / $this->distance;
+        echo $v." ".$d;
         $s = $v / $d;
         return $s > $GLOBALS['max_speed_mph'] ? $GLOBALS['max_speed_mph'] : $s;
     }
