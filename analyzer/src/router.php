@@ -2,6 +2,12 @@
 
 class Router {
     
+    
+    private static $currentDest;
+    private static $currentCur;
+    private static $currentPaths;
+    private static $choice;
+    
     public static function shortestPath(&$car, &$start) {
         
         session_start();
@@ -18,12 +24,10 @@ class Router {
             }
         }
         
-        $check = mysql_query("SELECT max_freeway_speed FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
+        $check = mysql_query("SELECT routing_type FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
         $row = mysql_fetch_row($check);
         $algorithm=$row[0];
-        if($algorithm == 1)
-            return array_reverse(Router::dfs($car->destination, $start));
-        return array_reverse(Router::optimal($car->destination, $start));
+        return array_reverse(Router::optimal($car->destination, $start, $algorithm));
     }
 
     public static function dfs(&$dest, &$cur) {
@@ -90,9 +94,19 @@ class Router {
         return $count;
     }
     
-    public static function optimal(&$dest, &$cur)
+    public static function optimal(&$dest, &$cur, $algorithm)
     {
-        $list = Router::allDfs($dest, $cur);
+        if(Router::$currentCur == $cur->id && $dest->id == Router::$currentDest)
+        {
+            $list = Router::$currentPaths;
+        }
+        else
+        {
+            $list = Router::allDfs($dest, $cur);
+            Router::$currentPaths = $list;
+            Router::$currentCur = $cur->id;
+            Router::$currentDest = $dest->id;
+        }
         $distances = array();
         $valid = array();
         $numValid;
@@ -108,29 +122,38 @@ class Router {
                 $minDist = $distances[$i];
             }
         }
+        if($algorithm == 1)
+        {
+            $entry = $list[$min];
+            return $entry;
+        }
         $numValid = 0;
+        $sum = 0;
         for($i = 0;$i < count($distances);$i++)
         {
             if($minDist *1.2 >= $distances[$i])
             {
-                //echo "~".$minDist."-".$distances[$i];
                 $numValid++;
                 $valid[$i] = true;
+                $sum += ($minDist/$distances[$i]);
             }
             else
             {
                 $valid[$i] = false;
             }
         }
-        //echo "***".$numValid;
-        $rand = rand(0, $numValid-1);
+        //$rand = rand(0, $numValid-1);
+        $rand = rand()/getrandmax();
+        //echo "***".$rand;
         $i = -1;
         while($rand >= 0)
         {
             $i++;
             if($valid[$i])
             {
-                $rand--;
+                //echo "$$$".(($minDist/$distances[$i])/$sum);
+                $rand-=(($minDist/$distances[$i])/$sum);
+                //echo " ".$rand;
             }
         }
         $entry = $list[$i];//$min

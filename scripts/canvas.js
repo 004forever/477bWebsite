@@ -684,7 +684,7 @@ function drawRoads()
         var holder1, holder2;
         var lowPart = simResults[lower][j]/2 + simResults[lower][j+71]/2;
         var highPart = simResults[upper][j]/2 + simResults[upper][j+71]/2;
-        var speed = (lowPart*(1-middle)+highPart*middle)/80;
+        var speed = lowPart/80;//(lowPart*(1-middle)+highPart*middle)/80;
         speed = speed*speed;
         if(speed < 1/2)
         {

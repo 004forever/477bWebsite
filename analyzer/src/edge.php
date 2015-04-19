@@ -25,7 +25,6 @@
             return $sum;
         }
         public function putCar(&$car, $time) {
-            echo "happened";
             $car->edgeLength = $this->distance;
             $this->car_history[$time % $GLOBALS['minutes_per_hour']][] = $car; //here's your problem
             parent::putCar($car);
@@ -51,7 +50,7 @@
          * Therefore Speed = Flow/Density
          */
         public function getSpeed() {
-            //$speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(528*$this->distance));
+            //$speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(2000*$this->distance));
             //return $speed;
             if($this->getCarSize() == 0)
                 return $GLOBALS['max_speed_mph'];

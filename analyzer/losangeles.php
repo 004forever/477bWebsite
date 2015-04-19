@@ -217,7 +217,7 @@ $engine = new Engine();
                 for($k = 0;$k < $elements["".$i."-".$j];$k++)
                 {
                     $car = new Car($node[$j]);
-                    $node[$i]->putCar($car, 0);
+                    $node[$i]->putCar($car);
                 }
             }
         }
