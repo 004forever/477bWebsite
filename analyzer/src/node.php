@@ -26,25 +26,25 @@ class Node extends Road {
 
     public function printAllRoutes() {
         foreach ($this->cars as $car) {
-            echo 'car from ' . $this->id . ' to ' . $car->destination->id . ': ';
+            Utils::debug_echo('car from ' . $this->id . ' to ' . $car->destination->id . ': ');
             foreach ($car->path as $node) {
-                echo $node->id . ',';
+                Utils::debug_echo($node->id . ',');
             }
-            echo "\n";
+            Utils::debug_echo("\n");
         }
     }
 
     public function tick($time) {
         //echo 'node '.$this->id.' is ticking';
         foreach ($this->cars as &$car) {
-            if ($car->destination == $this) {
+            if ($car->destination->id == $this->id) {
                 Utils::debug_echo('car reached destination at ' . $this->id);
                 continue;
             }
             $car->popNode();
             $found = false;
             foreach ($this->connections as &$conn) {
-                if ($car->nextNode() == $conn->getEnd()) {
+                if ($car->nextNode()->id == $conn->getEnd()->id) {
                     Utils::debug_echo('car moving to next edge ' . $conn->id);
                     $conn->putCar($car,$time);
                     $found = true;
@@ -52,7 +52,7 @@ class Node extends Road {
                 }
             }
             if (!$found) {
-                echo 'could not find path for car from node ' . $this->id . ' to ' . $car->destination->id.' expecting next node to be '.$car->nextNode()->id."\n";
+                Utils::debug_echo('could not find path for car from node ' . $this->id . ' to ' . $car->destination->id.' expecting next node to be '.$car->nextNode()->id."\n");
                 $this->printStatus();
                 die();
             } 
@@ -61,9 +61,9 @@ class Node extends Road {
     }
 
     public function printStatus() {
-        echo 'node ' . $this->id . ' with ' . $this->getCarSize() . ' cars: ' . "\n";
+        //Utils::debug_echo('node ' . $this->id . ' with ' . $this->getCarSize() . ' cars: ' . "\n");
         foreach ($this->connections as $con) {
-            echo "\tconnection id ".$con->id." to " . $con->end->id . " with " . $con->getCarSize() . " cars enroute\n";
+            Utils::debug_echo("\tconnection id ".$con->id." to " . $con->end->id . " with " . $con->getCarSize() . " cars enroute\n");
         }
     }
 

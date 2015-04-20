@@ -50,8 +50,8 @@
          * Therefore Speed = Flow/Density
          */
         public function getSpeed() {
-            //$speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(2000*$this->distance));
-            //return $speed;
+            $speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(2000*$this->distance));
+            return $speed;
             if($this->getCarSize() == 0)
                 return $GLOBALS['max_speed_mph'];
             $v = $this->getCarsPerHour();

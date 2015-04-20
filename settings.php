@@ -1,11 +1,9 @@
 <?php
     session_start();
-    /*if(!isset($_SESSION['user_id']))
+    if(!isset($_SESSION['user_id']))
      header("location: login.php");
      if(!isset($_SESSION['selection']))
-     $_SESSION['selection'] = 'Weekend';*/
-    $_SESSION['user_id'] = 0;
-    $_SESSION['selection'] = 'Weekend';
+     $_SESSION['selection'] = 'Weekend';
     $con=mysql_connect("localhost","four","password");
     if (!$con) {
         die('Could not connect to MySQL: ' . mysql_error());

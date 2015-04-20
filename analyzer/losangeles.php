@@ -1,14 +1,13 @@
 <?php
-
-require_once(__DIR__.'/autoload.php');
-
-$GLOBALS['tick_time_s']=60;//1 second per tick
-//$GLOBALS['max_speed_mph']=70;//70mph is max speed
-$GLOBALS['debug']=true;
+    require_once(__DIR__.'/autoload.php');
+    $start = microtime(true);
+    $GLOBALS['tick_time_s']=120;//1 second per tick
+    //$GLOBALS['max_speed_mph']=70;//70mph is max speed
+    $GLOBALS['debug']=false;
     
     $GLOBALS['minutes_per_hour']=60;
     session_start();
-    $_SESSION['user_id'] = 0;
+    //$_SESSION['user_id'] = 0;
     $con=mysql_connect("localhost","four","password");
     if (!$con) {
         die('Could not connect to MySQL: ' . mysql_error());
@@ -19,11 +18,9 @@ $GLOBALS['debug']=true;
             echo "Can't connect to 477b";
         }
     }
-
     $check = mysql_query("SELECT max_freeway_speed FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
     $row = mysql_fetch_row($check);
     $GLOBALS['max_speed_mph']=$row[0];
-
     
     $node = array();
     $edge = array();
@@ -177,10 +174,9 @@ $GLOBALS['debug']=true;
     $edge[139] = new Edge($node[32], $node[64], 4.32102);
     $edge[140] = new Edge($node[65], $node[33], 4.63919);
     $edge[141] = new Edge($node[39], $node[66], 1.81005);
-    
-    
-$engine = new Engine();
-    
+    //echo "A-".(microtime(true)-$start)."<br>";
+    //$start = microtime(true);
+    $engine = new Engine();
     for($i = 0;$i < 67;$i++)
     {
         $engine->addNode($node[$i]);
@@ -189,25 +185,12 @@ $engine = new Engine();
     {
         $engine->addEdge($edge[$i]);
     }
-
-    /*for($i = 0;$i < 142;$i++)
-    {
-        if($i < 67)
-            echo 'node'.$i.' is '.$node[$i]->id."\n";
-        echo 'edge'.$i.' is '.$edge[$i]->id."\n";
-    }*/
-
-//TODO spawn of car here with destination ie $car=new Car($destinationNode)
-//next add it to the node that it starts in ie $startNode->putCar($car)
-    
     $check = mysql_query("SELECT matrix FROM runs WHERE user_id='".$_SESSION['user_id']."' AND name = '".$_SESSION['selection']."'");
     $row = mysql_fetch_row($check);
     ini_set('max_input_vars', 5000);
     parse_str($row[0], $elements);
     ini_restore('max_input_vars');
     $size = 66;
-//var_dump($elements);
-//die();
     for($i = 0;$i <= $size;$i++)
     {
         for($j = 0;$j <= $size;$j++)
@@ -222,77 +205,8 @@ $engine = new Engine();
             }
         }
     }
-
-$engine->autoRoute();
-
-$engine->start();
-
-    $tempSpeed1;
-    $tempSpeed2;
-    $maxSize = 0;
-    $finalSize = array();
+    $engine->autoRoute();
+    $engine->start();
     $_SESSION['results'] = $engine->getJsonResults();
     echo "<script> window.location.href = '../index.php';</script>";
-   // echo  $_SESSION['results'];
-    //echo 'done';
-    /*
-    for($i = 0;$i < 71;$i++)
-    {
-        $tempSpeed1 = $edge[$i]->returnSpeeds();
-        $tempSpeed2 = $edge[$i+71]->returnSpeeds();
-        for($j = 0;$j < count($tempSpeed1) || $j < count($tempSpeed2);$j++)
-        {
-            if($i < count($tempSpeed1) && $i < count($tempSpeed2))
-            {
-                $tempSpeed1[$i] = ($tempSpeed1[$i] + $tempSpeed2[$i])/2;
-            }
-            else if($i < count($tempSpeed2))
-            {
-                $tempSpeed1[$i] = $tempSpeed2[$i];
-            }
-        }
-        if(count($tempSpeed1) > $maxSize)
-        {
-            $maxSize = count($tempSpeed1);
-        }
-        $speeds[$i] = $tempSpeed1;
-    }
-    for($i = 0;$i < 71;$i++)
-    {
-        for($j = 0;$j < $maxSize;$j++)
-        {
-            if($j > count($speeds[$i]))
-            {
-                $finalSize[$i + $j*71] = $GLOBALS['max_speed_mph'];//*($j+1);
-            }
-            else
-            {
-                $finalSize[$i+$j*71] = $speeds[$i][$j];//*($j*2+2);
-            }
-        }
-        $finalSize[$i+$maxSize*71] =$GLOBALS['max_speed_mph'];
-    }
-    $myFile = "../output.txt";
-    $fh = fopen($myFile, 'w');
-    $output = '[';
-    fwrite($fh, $output);
-    for($i = 0;$i < count($finalSize);$i++)
-    {
-        if($i != count($finalSize)-1)
-            $output =  $finalSize[$i].",";
-        else
-            $output = $finalSize[$i];
-        fwrite($fh, $output);
-    }
-    $output = ']';
-    fwrite($fh, $output);
-    fclose($fh);
-
-    //header("location: ../index.php");
-    
-    //$engine->getJsonResults();//THIS CONTAINS THE JSON OBJECT, I think you can hack it and just do
-    /*
-     * <script>var simResult = <?=$engine->getJsonResults();?>;//global variable with json results sent to front end</script>
-     * 
-     */
 ?>

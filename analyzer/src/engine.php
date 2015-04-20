@@ -26,7 +26,7 @@ class Engine {
 
     public function start() {
         while (true) {
-            echo "tick\n";
+            Utils::debug_echo("tick ");
             $this->tick();
             $this->printStatus();
             if ($this->noCarsInSystem()) {
@@ -74,12 +74,18 @@ class Engine {
     }
 
     public function tick() {
+        //$timer = microtime(true);
+        //$start = microtime(true);
         foreach ($this->edges as $e) {
             $e->tick($this->time);
         }
+        //echo "$-".(microtime(true) - $start);
+        //$start = microtime(true);
         foreach ($this->nodes as $n) {
             $n->tick($this->time);
         }
+        //echo "@-".(microtime(true) - $start);
+        //$start = microtime(true);
         $this->speed_info[] = $this->gatherSpeedInfo();
         $this->time++;
     }

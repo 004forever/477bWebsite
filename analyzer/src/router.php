@@ -7,12 +7,15 @@ class Router {
     private static $currentCur;
     private static $currentPaths;
     private static $choice;
+    private static $currentDist;
+    private static $currentValid;
+    
+    private static $currentMin;
+    private static $currentMinDist;
     
     public static function shortestPath(&$car, &$start) {
         
         session_start();
-        $_SESSION['user_id'] = 0;
-        $_SESSION['selection'] = 'Weekend';
         $con=mysql_connect("localhost","four","password");
         if (!$con) {
             die('Could not connect to MySQL: ' . mysql_error());
@@ -48,7 +51,7 @@ class Router {
     }
     
     public static function allDfs(&$dest, &$cur) {
-        if ($cur == $dest) {
+        if ($cur->id == $dest->id) {
             $cur->discovered = true;
             return array(array($dest));
         }
@@ -85,9 +88,10 @@ class Router {
         for($i = 1;$i < count($path);$i++){
             for($j = 0;$j < count($path[$i-1]->connections);$j++)
             {
-                if($path[$i-1]->connections[$j]->end == $path[$i])
+                if($path[$i-1]->connections[$j]->end->id == $path[$i]->id)
                 {
                     $count+=$path[$i-1]->connections[$j]->distance;
+                    break;
                 }
             }
         }
@@ -99,6 +103,12 @@ class Router {
         if(Router::$currentCur == $cur->id && $dest->id == Router::$currentDest)
         {
             $list = Router::$currentPaths;
+            $distances = Router::$currentDist;
+            $valid = Router::$currentValid;
+            
+            $valid = Router::$currentValid;
+            $min = Router::$currentMin;
+            $minDist = Router::$currentMinDist;
         }
         else
         {
@@ -106,34 +116,35 @@ class Router {
             Router::$currentPaths = $list;
             Router::$currentCur = $cur->id;
             Router::$currentDest = $dest->id;
-        }
-        $distances = array();
-        $valid = array();
-        $numValid;
-        $min = -1;
-        $minDist = 0;
-        $entry;
-        for($i = 0;$i < count($list);$i++)
-        {
-            $distances[$i] = Router::getLength(array_reverse($list[$i]));
-            if($distances[$i] < $minDist || $minDist ==0)
+            
+            $distances = array();
+            $valid = array();
+            $min = -1;
+            $minDist = 0;
+            for($i = 0;$i < count($list);$i++)
             {
-                $min = $i;
-                $minDist = $distances[$i];
+                $distances[$i] = Router::getLength(array_reverse($list[$i]));
+                if($distances[$i] < $minDist || $minDist ==0)
+                {
+                    $min = $i;
+                    $minDist = $distances[$i];
+                }
             }
+            
+            Router::$currentDist = $distances;
+            Router::$currentValid = $valid;
+            Router::$currentMin = $min;
+            Router::$currentMinDist = $minDist;
+            
+            
         }
-        if($algorithm == 1)
-        {
-            $entry = $list[$min];
-            return $entry;
-        }
-        $numValid = 0;
+    
+        
         $sum = 0;
         for($i = 0;$i < count($distances);$i++)
         {
             if($minDist *1.2 >= $distances[$i])
             {
-                $numValid++;
                 $valid[$i] = true;
                 $sum += ($minDist/$distances[$i]);
             }
@@ -142,18 +153,20 @@ class Router {
                 $valid[$i] = false;
             }
         }
-        //$rand = rand(0, $numValid-1);
+
+        if($algorithm == 1)
+        {
+            $entry = $list[$min];
+            return $entry;
+        }
         $rand = rand()/getrandmax();
-        //echo "***".$rand;
         $i = -1;
         while($rand >= 0)
         {
             $i++;
             if($valid[$i])
             {
-                //echo "$$$".(($minDist/$distances[$i])/$sum);
                 $rand-=(($minDist/$distances[$i])/$sum);
-                //echo " ".$rand;
             }
         }
         $entry = $list[$i];//$min
