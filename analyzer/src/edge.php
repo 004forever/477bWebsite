@@ -51,6 +51,8 @@
          */
         public function getSpeed() {
             $speed = $GLOBALS['max_speed_mph']*(1-$this->getCarSize()/(2000*$this->distance));
+            if($speed < 1)
+                $speed = 1;
             return $speed;
             if($this->getCarSize() == 0)
                 return $GLOBALS['max_speed_mph'];
